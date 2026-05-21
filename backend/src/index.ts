@@ -1,9 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 
-const envPath = new URL('../.env', import.meta.url);
-dotenv.config({ path: envPath.pathname });
+// Load env only in development
+if (process.env.NODE_ENV !== 'production') {
+  const dotenv = await import('dotenv');
+  const { fileURLToPath } = await import('url');
+  const { dirname, resolve } = await import('path');
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  dotenv.default.config({ path: resolve(__dirname, '../.env') });
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
