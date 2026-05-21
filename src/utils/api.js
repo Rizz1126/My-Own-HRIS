@@ -1,5 +1,4 @@
-// In production (Vercel), use relative paths. In development, use the local backend.
-const BASE_URL = import.meta.env.PROD ? '/api' : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 /**
  * Basic wrapper around the native fetch API for making JSON requests.

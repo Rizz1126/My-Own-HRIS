@@ -15,8 +15,7 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    // Add additional fields you want to collect on signup
+    // e.g., requireEmailVerification: false
   },
-  trustedOrigins: process.env.VERCEL_URL 
-    ? [`https://${process.env.VERCEL_URL}`, process.env.FRONTEND_URL].filter(Boolean) as string[]
-    : ['http://localhost:5173', 'http://localhost:3000'],
 });
