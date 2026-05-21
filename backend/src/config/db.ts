@@ -12,6 +12,11 @@ if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
   dotenv.config({ path: resolve(__dirname, '../../.env') });
 }
 
-// for query purposes
-const queryClient = postgres(process.env.DATABASE_URL as string);
+// Use POSTGRES_URL (Supabase) or DATABASE_URL as fallback
+const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error('Database connection string not found. Set POSTGRES_URL or DATABASE_URL.');
+}
+
+const queryClient = postgres(connectionString);
 export const db = drizzle(queryClient, { schema });
