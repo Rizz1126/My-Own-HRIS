@@ -4,11 +4,11 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { eq } from 'drizzle-orm';
 import { 
-  employees, departments, positions, contracts, projects, 
-  assignments, clients, attendance, shifts, leaveRequests,
-  overtimeRequests, payrollRecords, taxRecords, bpjsRecords,
-  users, jobPostings, candidates, candidateStages, assessments,
-  onboardingTasks, careerPaths
+  employees, departments, contracts, projects, 
+  assignments, clients, attendances, shifts, leaveRequests,
+  overtimeRequests, payslips, users, jobOpenings, candidates, assessments,
+  onboardingTasks, careerTracks, careerLevels, employeeCareerProgress,
+  reimbursements, announcements, notifications, employeeSchedules
 } from '../backend/src/db/schema';
 import * as schema from '../backend/src/db/schema';
 
@@ -22,24 +22,9 @@ const db = drizzle(queryClient, { schema });
 
 const app = express();
 
-// CORS configuration
-const allowedOrigins = process.env.VERCEL_URL 
-  ? [`https://${process.env.VERCEL_URL}`, 'https://rizaldi-hris.vercel.app']
-  : ['http://localhost:5173', 'http://localhost:3000'];
-
+// CORS configuration - allow all origins for now
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, etc)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.some(allowed => origin.includes(allowed.replace('https://', '').replace('http://', '')))) {
-      return callback(null, true);
-    }
-    // Allow all vercel.app subdomains
-    if (origin.includes('vercel.app')) {
-      return callback(null, true);
-    }
-    callback(null, true); // Allow all for now during development
-  },
+  origin: true,
   credentials: true,
 }));
 
@@ -103,25 +88,6 @@ app.get('/api/master-data/departments', async (req, res) => {
 app.post('/api/master-data/departments', async (req, res) => {
   try {
     const result = await db.insert(departments).values(req.body).returning();
-    res.status(201).json(result[0]);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-// ============ POSITIONS ============
-app.get('/api/master-data/positions', async (req, res) => {
-  try {
-    const result = await db.select().from(positions);
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch positions' });
-  }
-});
-
-app.post('/api/master-data/positions', async (req, res) => {
-  try {
-    const result = await db.insert(positions).values(req.body).returning();
     res.status(201).json(result[0]);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -207,7 +173,7 @@ app.post('/api/master-data/assignments', async (req, res) => {
 // ============ ATTENDANCE ============
 app.get('/api/attendance', async (req, res) => {
   try {
-    const result = await db.select().from(attendance);
+    const result = await db.select().from(attendances);
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch attendance' });
@@ -216,7 +182,7 @@ app.get('/api/attendance', async (req, res) => {
 
 app.post('/api/attendance', async (req, res) => {
   try {
-    const result = await db.insert(attendance).values(req.body).returning();
+    const result = await db.insert(attendances).values(req.body).returning();
     res.status(201).json(result[0]);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -236,6 +202,25 @@ app.get('/api/attendance/shifts', async (req, res) => {
 app.post('/api/attendance/shifts', async (req, res) => {
   try {
     const result = await db.insert(shifts).values(req.body).returning();
+    res.status(201).json(result[0]);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// ============ EMPLOYEE SCHEDULES ============
+app.get('/api/attendance/schedules', async (req, res) => {
+  try {
+    const result = await db.select().from(employeeSchedules);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch schedules' });
+  }
+});
+
+app.post('/api/attendance/schedules', async (req, res) => {
+  try {
+    const result = await db.insert(employeeSchedules).values(req.body).returning();
     res.status(201).json(result[0]);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -283,35 +268,74 @@ app.post('/api/overtime', async (req, res) => {
 // ============ PAYROLL ============
 app.get('/api/payroll', async (req, res) => {
   try {
-    const result = await db.select().from(payrollRecords);
+    const result = await db.select().from(payslips);
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch payroll records' });
   }
 });
 
-app.get('/api/payroll/tax', async (req, res) => {
+app.post('/api/payroll', async (req, res) => {
   try {
-    const result = await db.select().from(taxRecords);
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch tax records' });
+    const result = await db.insert(payslips).values(req.body).returning();
+    res.status(201).json(result[0]);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
   }
 });
 
-app.get('/api/payroll/bpjs', async (req, res) => {
+// ============ REIMBURSEMENTS ============
+app.get('/api/reimbursements', async (req, res) => {
   try {
-    const result = await db.select().from(bpjsRecords);
+    const result = await db.select().from(reimbursements);
     res.json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch BPJS records' });
+    res.status(500).json({ error: 'Failed to fetch reimbursements' });
+  }
+});
+
+app.post('/api/reimbursements', async (req, res) => {
+  try {
+    const result = await db.insert(reimbursements).values(req.body).returning();
+    res.status(201).json(result[0]);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// ============ ANNOUNCEMENTS ============
+app.get('/api/announcements', async (req, res) => {
+  try {
+    const result = await db.select().from(announcements);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch announcements' });
+  }
+});
+
+app.post('/api/announcements', async (req, res) => {
+  try {
+    const result = await db.insert(announcements).values(req.body).returning();
+    res.status(201).json(result[0]);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// ============ NOTIFICATIONS ============
+app.get('/api/notifications', async (req, res) => {
+  try {
+    const result = await db.select().from(notifications);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch notifications' });
   }
 });
 
 // ============ TALENT / RECRUITMENT ============
 app.get('/api/talent/job-postings', async (req, res) => {
   try {
-    const result = await db.select().from(jobPostings);
+    const result = await db.select().from(jobOpenings);
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch job postings' });
@@ -320,7 +344,7 @@ app.get('/api/talent/job-postings', async (req, res) => {
 
 app.post('/api/talent/job-postings', async (req, res) => {
   try {
-    const result = await db.insert(jobPostings).values(req.body).returning();
+    const result = await db.insert(jobOpenings).values(req.body).returning();
     res.status(201).json(result[0]);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -333,6 +357,15 @@ app.get('/api/talent/candidates', async (req, res) => {
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch candidates' });
+  }
+});
+
+app.post('/api/talent/candidates', async (req, res) => {
+  try {
+    const result = await db.insert(candidates).values(req.body).returning();
+    res.status(201).json(result[0]);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -354,12 +387,31 @@ app.get('/api/talent/onboarding', async (req, res) => {
   }
 });
 
-app.get('/api/talent/career-paths', async (req, res) => {
+// ============ CAREER ============
+app.get('/api/talent/career-tracks', async (req, res) => {
   try {
-    const result = await db.select().from(careerPaths);
+    const result = await db.select().from(careerTracks);
     res.json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch career paths' });
+    res.status(500).json({ error: 'Failed to fetch career tracks' });
+  }
+});
+
+app.get('/api/talent/career-levels', async (req, res) => {
+  try {
+    const result = await db.select().from(careerLevels);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch career levels' });
+  }
+});
+
+app.get('/api/talent/career-progress', async (req, res) => {
+  try {
+    const result = await db.select().from(employeeCareerProgress);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch career progress' });
   }
 });
 
@@ -373,12 +425,14 @@ app.get('/api/employees/users/all', async (req, res) => {
   }
 });
 
-// ============ AUTH (Placeholder - needs better-auth setup) ============
+// ============ AUTH ============
 app.post('/api/auth/sign-up/email', async (req, res) => {
   try {
     const { email, password, name } = req.body;
-    // For now, create user directly in database
+    // Generate a simple ID for the user
+    const userId = `user_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     const result = await db.insert(users).values({
+      id: userId,
       email,
       name,
       emailVerified: false,
@@ -387,6 +441,7 @@ app.post('/api/auth/sign-up/email', async (req, res) => {
     }).returning();
     res.status(201).json({ user: result[0] });
   } catch (error: any) {
+    console.error('Sign up error:', error);
     res.status(400).json({ error: error.message });
   }
 });
