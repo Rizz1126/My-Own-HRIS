@@ -43,7 +43,11 @@ app.use('/api/payroll', payrollRouter);
 app.use('/api/ess', essRouter);
 app.use('/api/analytics', analyticsRouter);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Start server only if not in Vercel production
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
