@@ -48,8 +48,24 @@ app.use('/api/payroll', payrollRouter);
 app.use('/api/ess', essRouter);
 app.use('/api/analytics', analyticsRouter);
 
-// Start server only if not in Vercel production
-if (process.env.NODE_ENV !== 'production') {
+// Serve static frontend files in production (Render All-in-One)
+if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
+  import('path').then(({ resolve, dirname }) => {
+    import('url').then(({ fileURLToPath }) => {
+      const currentDir = typeof __dirname !== 'undefined' ? __dirname : dirname(fileURLToPath(import.meta.url));
+      const distPath = resolve(currentDir, '../../dist');
+      
+      app.use(express.static(distPath));
+      
+      app.get('*', (req, res) => {
+        res.sendFile(resolve(distPath, 'index.html'));
+      });
+    });
+  });
+}
+
+// Start server on Render or Local (Skip only on Vercel Serverless)
+if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });

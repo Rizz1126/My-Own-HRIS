@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: dashboard-hris-ai
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Tambahkan DATABASE_URL dari dashboard Render atau isi nilainya di sini jika aman (not recommended for production)
+      - key: DATABASE_URL
+        sync: false 
