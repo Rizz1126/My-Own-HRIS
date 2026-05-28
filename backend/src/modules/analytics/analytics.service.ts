@@ -15,7 +15,7 @@ export class AnalyticsService {
     const activeEmployees = allEmps.filter(e => e.status !== 'Inactive' && e.status !== 'Resigned').length;
     
     // Real Attendance Rate calculation (last 7 days)
-    const last7Days = [];
+    const last7Days: string[] = [];
     for (let i = 0; i < 7; i++) {
       const d = new Date();
       d.setDate(d.getDate() - i);
@@ -44,7 +44,7 @@ export class AnalyticsService {
     }).length;
 
     // Headcount trend
-    const headcountTrend = [];
+    const headcountTrend: any[] = [];
     for (let i = 5; i >= 0; i--) {
       const d = new Date();
       d.setMonth(d.getMonth() - i);
@@ -114,7 +114,7 @@ export class AnalyticsService {
     const allEmps = await db.select().from(employees);
     
     // Group joins and exits by month (last 12 months)
-    const months = [];
+    const months: any[] = [];
     for (let i = 11; i >= 0; i--) {
       const d = new Date();
       d.setMonth(d.getMonth() - i);
@@ -178,7 +178,7 @@ export class AnalyticsService {
     const reimbursementTotal = Number(approvedReimbursements[0]?.total || 0);
 
     // 3. Generate 6 months of predictions
-    const predictions = [];
+    const predictions: any[] = [];
     const allEmps = await db.select().from(employees);
     const baseSalaryTotal = allEmps.reduce((acc, e) => acc + Number(e.baseSalary || 0), 0);
     const lastTotal = history.length > 0 ? Number(history[history.length - 1].total) : baseSalaryTotal * 1.1;
