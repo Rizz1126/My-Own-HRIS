@@ -88,7 +88,7 @@ export default function Dashboard() {
     projects
   } = data;
 
-  const nonPermanentContracts = contracts.filter(c => c.endDate);
+  const nonPermanentContracts = (contracts || []).filter(c => c.endDate);
   
   const contractStats = { expiring30: 0, expiring60: 0, expiringMore: 0, expired: 0 };
   const now = Date.now();
@@ -129,7 +129,7 @@ export default function Dashboard() {
   // Calculate dynamic department stats based on employee context and filter
   const dynamicDeptStats = (() => {
     const map = {};
-    employees.forEach(e => {
+    (employees || []).forEach(e => {
       if (empStatusFilter === 'Active' && e.status === 'Inactive') return;
       if (empStatusFilter === 'Inactive' && e.status !== 'Inactive') return;
       
@@ -140,7 +140,7 @@ export default function Dashboard() {
     return Object.entries(map).map(([name, count]) => ({ name, count })).sort((a,b)=>b.count-a.count);
   })();
 
-  const topProjects = [...projects].sort((a, b) => (b.progress || 0) - (a.progress || 0)).slice(0, 6);
+  const topProjects = [...(projects || [])].sort((a, b) => (b.progress || 0) - (a.progress || 0)).slice(0, 6);
 
   const compactCardStyle = {
     cursor: 'pointer', transition: 'all 0.2s', position: 'relative', overflow: 'hidden',

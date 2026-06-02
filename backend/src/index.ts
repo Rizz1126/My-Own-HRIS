@@ -1,13 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 
+import dotenv from 'dotenv';
+import path from 'path';
+
 // Load env only in development
 if (process.env.NODE_ENV !== 'production') {
-  const dotenv = await import('dotenv');
-  const { fileURLToPath } = await import('url');
-  const { dirname, resolve } = await import('path');
-  const __dirname = dirname(fileURLToPath(import.meta.url));
-  dotenv.default.config({ path: resolve(__dirname, '../.env') });
+  dotenv.config({ path: path.resolve(__dirname, '../.env') });
 }
 
 const app = express();
@@ -16,11 +15,17 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-import { toNodeHandler } from 'better-auth/node';
 import { auth } from './config/auth';
 
 // Better Auth API Route
-app.use('/api/auth', toNodeHandler(auth));
+let authHandler: any;
+app.all('/api/auth/{*path}', async (req, res, next) => {
+  if (!authHandler) {
+    const { toNodeHandler } = await import('better-auth/node');
+    authHandler = toNodeHandler(auth);
+  }
+  return authHandler(req, res);
+});
 
 import customAuthRouter from './modules/auth/auth.routes';
 app.use('/api/auth-custom', customAuthRouter);
@@ -50,16 +55,13 @@ app.use('/api/analytics', analyticsRouter);
 
 // Serve static frontend files in production (Render All-in-One)
 if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
-  import('path').then(({ resolve, dirname }) => {
-    import('url').then(({ fileURLToPath }) => {
-      const currentDir = typeof __dirname !== 'undefined' ? __dirname : dirname(fileURLToPath(import.meta.url));
-      const distPath = resolve(currentDir, '../../dist');
-      
-      app.use(express.static(distPath));
-      
-      app.get('*', (req, res) => {
-        res.sendFile(resolve(distPath, 'index.html'));
-      });
+  import('path').then(({ resolve }) => {
+    const distPath = resolve(__dirname, '../../dist');
+    
+    app.use(express.static(distPath));
+    
+    app.get('*', (req, res) => {
+      res.sendFile(resolve(distPath, 'index.html'));
     });
   });
 }
