@@ -2972,8 +2972,9 @@ body:has(.modal-overlay) .topbar {
 @media (max-width: 768px) {
   .auth-card {
     padding: 32px 24px;
+    width: calc(100% - 32px);
     max-width: 100%;
-    margin: 0 16px;
+    margin: 0 auto;
   }
 }
 
