@@ -12,7 +12,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "better-auth": "^1.6.9",
     "cors": "^2.8.6",

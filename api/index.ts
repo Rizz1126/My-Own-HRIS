@@ -28,8 +28,10 @@ app.use(express.json());
 // Better Auth API Route
 app.use('/api/auth', toNodeHandler(auth));
 
+const resolveRouter = (router: any) => router.default || router;
+
 // Custom auth routes
-app.use('/api/auth-custom', customAuthRouter);
+app.use('/api/auth-custom', resolveRouter(customAuthRouter));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -37,13 +39,13 @@ app.get('/api/health', (req, res) => {
 });
 
 // API routes
-app.use('/api/employees', employeesRouter);
-app.use('/api/attendance', attendanceRouter);
-app.use('/api/talent', talentRouter);
-app.use('/api/overtime', overtimeRouter);
-app.use('/api/master-data', masterDataRouter);
-app.use('/api/payroll', payrollRouter);
-app.use('/api/ess', essRouter);
-app.use('/api/analytics', analyticsRouter);
+app.use('/api/employees', resolveRouter(employeesRouter));
+app.use('/api/attendance', resolveRouter(attendanceRouter));
+app.use('/api/talent', resolveRouter(talentRouter));
+app.use('/api/overtime', resolveRouter(overtimeRouter));
+app.use('/api/master-data', resolveRouter(masterDataRouter));
+app.use('/api/payroll', resolveRouter(payrollRouter));
+app.use('/api/ess', resolveRouter(essRouter));
+app.use('/api/analytics', resolveRouter(analyticsRouter));
 
 export default app;
