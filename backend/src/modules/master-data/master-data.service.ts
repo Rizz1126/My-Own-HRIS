@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../../config/db';
-import { contracts, projects, clients, employees, assignments, departments } from '../../db/schema';
+import { db } from '../../config/db.js';
+import { contracts, projects, clients, employees, assignments, departments } from '../../db/schema.js';
 
 export class MasterDataService {
   // Contracts

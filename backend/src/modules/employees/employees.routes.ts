@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { EmployeeService } from './employees.service';
-import { UserService } from './users.service';
+import { EmployeeService } from './employees.service.js';
+import { UserService } from './users.service.js';
 
 const router = Router();
 

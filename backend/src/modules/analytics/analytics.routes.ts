@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { AnalyticsService } from './analytics.service';
+import { AnalyticsService } from './analytics.service.js';
 
 const router = Router();
 

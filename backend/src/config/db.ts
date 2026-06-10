@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import * as schema from '../db/schema';
+import * as schema from '../db/schema.js';
 
 // In Vercel, environment variables are available directly
 // In local development, dotenv loads them

@@ -1,6 +1,6 @@
 import { eq, and, desc } from 'drizzle-orm';
-import { db } from '../../config/db';
-import { attendances, employees, shifts, employeeSchedules, leaveRequests, departments } from '../../db/schema';
+import { db } from '../../config/db.js';
+import { attendances, employees, shifts, employeeSchedules, leaveRequests, departments } from '../../db/schema.js';
 
 export class AttendanceService {
   static async getTodayAttendance(date: string) {

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PayrollService } from './payroll.service';
+import { PayrollService } from './payroll.service.js';
 
 const router = Router();
 

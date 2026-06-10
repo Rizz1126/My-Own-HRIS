@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-import { auth } from './config/auth';
+import { auth } from './config/auth.js';
 
 // Better Auth API Route
 let authHandler: any;
@@ -27,7 +27,7 @@ app.all('/api/auth/{*path}', async (req, res, next) => {
   return authHandler(req, res);
 });
 
-import customAuthRouter from './modules/auth/auth.routes';
+import customAuthRouter from './modules/auth/auth.routes.js';
 app.use('/api/auth-custom', customAuthRouter);
 
 // Basic healthcheck route
@@ -35,14 +35,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'HRIS API is running' });
 });
 
-import employeesRouter from './modules/employees/employees.routes';
-import attendanceRouter from './modules/attendance/attendance.routes';
-import talentRouter from './modules/talent/talent.routes';
-import overtimeRouter from './modules/overtime/overtime.routes';
-import masterDataRouter from './modules/master-data/master-data.routes';
-import payrollRouter from './modules/payroll/payroll.routes';
-import essRouter from './modules/ess/ess.routes';
-import analyticsRouter from './modules/analytics/analytics.routes';
+import employeesRouter from './modules/employees/employees.routes.js';
+import attendanceRouter from './modules/attendance/attendance.routes.js';
+import talentRouter from './modules/talent/talent.routes.js';
+import overtimeRouter from './modules/overtime/overtime.routes.js';
+import masterDataRouter from './modules/master-data/master-data.routes.js';
+import payrollRouter from './modules/payroll/payroll.routes.js';
+import essRouter from './modules/ess/ess.routes.js';
+import analyticsRouter from './modules/analytics/analytics.routes.js';
 
 app.use('/api/employees', employeesRouter);
 app.use('/api/attendance', attendanceRouter);

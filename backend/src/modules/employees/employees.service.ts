@@ -1,6 +1,6 @@
 import { eq, sql } from 'drizzle-orm';
-import { db } from '../../config/db';
-import { employees, departments, assignments, projects, clients, contracts } from '../../db/schema';
+import { db } from '../../config/db.js';
+import { employees, departments, assignments, projects, clients, contracts } from '../../db/schema.js';
 
 export class EmployeeService {
   static async getAllEmployees() {

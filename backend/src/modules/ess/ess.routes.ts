@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { EssService } from './ess.service';
+import { EssService } from './ess.service.js';
 
 const router = Router();
 

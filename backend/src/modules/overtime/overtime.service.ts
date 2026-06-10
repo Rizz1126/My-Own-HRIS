@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../../config/db';
-import { overtimeRequests, overtimeBatches, employees } from '../../db/schema';
+import { db } from '../../config/db.js';
+import { overtimeRequests, overtimeBatches, employees } from '../../db/schema.js';
 
 export class OvertimeService {
   // Requests

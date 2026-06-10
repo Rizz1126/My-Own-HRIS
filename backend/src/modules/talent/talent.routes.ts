@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { TalentService } from './talent.service';
+import { TalentService } from './talent.service.js';
 
 const router = Router();
 

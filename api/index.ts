@@ -6,17 +6,17 @@ let initError: any = null;
 
 try {
   const { toNodeHandler } = await import('better-auth/node');
-  const { auth } = await import('../backend/src/config/auth');
+  const { auth } = await import('../backend/src/config/auth.js');
 
-  const customAuthRouter = await import('../backend/src/modules/auth/auth.routes');
-  const employeesRouter = await import('../backend/src/modules/employees/employees.routes');
-  const attendanceRouter = await import('../backend/src/modules/attendance/attendance.routes');
-  const talentRouter = await import('../backend/src/modules/talent/talent.routes');
-  const overtimeRouter = await import('../backend/src/modules/overtime/overtime.routes');
-  const masterDataRouter = await import('../backend/src/modules/master-data/master-data.routes');
-  const payrollRouter = await import('../backend/src/modules/payroll/payroll.routes');
-  const essRouter = await import('../backend/src/modules/ess/ess.routes');
-  const analyticsRouter = await import('../backend/src/modules/analytics/analytics.routes');
+  const customAuthRouter = await import('../backend/src/modules/auth/auth.routes.js');
+  const employeesRouter = await import('../backend/src/modules/employees/employees.routes.js');
+  const attendanceRouter = await import('../backend/src/modules/attendance/attendance.routes.js');
+  const talentRouter = await import('../backend/src/modules/talent/talent.routes.js');
+  const overtimeRouter = await import('../backend/src/modules/overtime/overtime.routes.js');
+  const masterDataRouter = await import('../backend/src/modules/master-data/master-data.routes.js');
+  const payrollRouter = await import('../backend/src/modules/payroll/payroll.routes.js');
+  const essRouter = await import('../backend/src/modules/ess/ess.routes.js');
+  const analyticsRouter = await import('../backend/src/modules/analytics/analytics.routes.js');
 
   app.use(cors({
     origin: process.env.VERCEL_URL 

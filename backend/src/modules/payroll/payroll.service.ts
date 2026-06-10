@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../../config/db';
-import { payslips, employees, departments } from '../../db/schema';
+import { db } from '../../config/db.js';
+import { payslips, employees, departments } from '../../db/schema.js';
 
 export class PayrollService {
   static async getAllPayslips() {

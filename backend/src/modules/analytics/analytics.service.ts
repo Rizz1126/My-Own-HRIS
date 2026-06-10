@@ -1,6 +1,6 @@
 import { eq, sql } from 'drizzle-orm';
-import { db } from '../../config/db';
-import { employees, attendances, departments, payslips, contracts, projects, clients, assignments, reimbursements } from '../../db/schema';
+import { db } from '../../config/db.js';
+import { employees, attendances, departments, payslips, contracts, projects, clients, assignments, reimbursements } from '../../db/schema.js';
 
 export class AnalyticsService {
   static async getDashboardStats() {

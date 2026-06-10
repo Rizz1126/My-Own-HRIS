@@ -1,6 +1,6 @@
 import { eq, and, sql, or } from 'drizzle-orm';
-import { db } from '../../config/db';
-import { jobOpenings, candidates, departments, onboardingTasks, employees, assessments, assessmentScores, careerTracks, careerLevels, employeeCareerProgress } from '../../db/schema';
+import { db } from '../../config/db.js';
+import { jobOpenings, candidates, departments, onboardingTasks, employees, assessments, assessmentScores, careerTracks, careerLevels, employeeCareerProgress } from '../../db/schema.js';
 
 const DEFAULT_ONBOARDING_TASKS = [
   'Complete HR paperwork & employment contract signing',

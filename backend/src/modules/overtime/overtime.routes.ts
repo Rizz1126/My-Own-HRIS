@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { OvertimeService } from './overtime.service';
+import { OvertimeService } from './overtime.service.js';
 
 const router = Router();
 

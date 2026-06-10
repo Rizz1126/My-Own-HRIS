@@ -1,6 +1,6 @@
 import { eq, desc, sql } from 'drizzle-orm';
-import { db } from '../../config/db';
-import { reimbursements, employees, users, announcements, notifications } from '../../db/schema';
+import { db } from '../../config/db.js';
+import { reimbursements, employees, users, announcements, notifications } from '../../db/schema.js';
 
 export class EssService {
   static async getReimbursements(employeeId?: string) {

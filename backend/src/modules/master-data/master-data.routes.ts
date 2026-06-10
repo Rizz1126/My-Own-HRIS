@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { MasterDataService } from './master-data.service';
+import { MasterDataService } from './master-data.service.js';
 
 const router = Router();
 
