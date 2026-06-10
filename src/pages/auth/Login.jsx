@@ -46,83 +46,108 @@ export default function Login() {
         <div className="auth-bg-orb auth-bg-orb-3" />
       </div>
 
-      <div className="auth-centered">
-        <div className="auth-card">
-          {/* Logo */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', textAlign: 'left', width: '100%', marginBottom: '32px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '12px', marginBottom: '4px' }}>
-              <div className="auth-logo-icon">H</div>
-              <span style={{ fontSize: '1.9rem', fontWeight: 800, background: 'linear-gradient(135deg, var(--color-primary), #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.5px' }}>Humanova</span>
+      <div className="auth-container">
+        {/* Left Branding Panel */}
+        <div className="auth-branding">
+          <div className="auth-branding-content">
+            <h1 className="auth-branding-title" style={{ fontWeight: 600 }}>Humanova</h1>
+            <p className="auth-branding-desc" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)' }}>
+              Transforming HR Experience
+            </p>
+            <div className="auth-branding-features">
+              <div className="auth-branding-feature">
+                <div className="auth-branding-check">✓</div>
+                <span>Automated Payroll Engine</span>
+              </div>
+              <div className="auth-branding-feature">
+                <div className="auth-branding-check">✓</div>
+                <span>Employee Self-Service (ESS)</span>
+              </div>
+              <div className="auth-branding-feature">
+                <div className="auth-branding-check">✓</div>
+                <span>Real-time Analytics Dashboard</span>
+              </div>
             </div>
-            <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '20px', textAlign: 'left' }}>Transforming HR Experience</p>
-            <h2 className="auth-form-title" style={{ marginBottom: '6px', textAlign: 'left' }}>Welcome Back</h2>
-            <p className="auth-form-subtitle" style={{ textAlign: 'left' }}>Sign in to your Humanova account</p>
           </div>
+        </div>
 
-          {error && (
-            <div className="auth-error">
-              <AlertCircle size={16} />
-              <span>{error}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="auth-form">
-            <div className="auth-field">
-              <label className="auth-label">Employee ID</label>
-              <div className="auth-input-wrapper">
-                <User size={18} className="auth-input-icon" />
-                <input
-                  type="text"
-                  className="auth-input"
-                  placeholder="e.g. EMP001"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  autoComplete="username"
-                />
+        {/* Right Form Panel */}
+        <div className="auth-form-panel">
+          <div className="auth-form-wrapper">
+            {/* Logo & Welcome */}
+            <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+              <div className="auth-logo" style={{ justifyContent: 'center', marginBottom: '16px' }}>
+                <div className="auth-logo-icon">H</div>
               </div>
+              <h2 className="auth-form-title" style={{ marginBottom: '6px' }}>Welcome Back</h2>
+              <p className="auth-form-subtitle">Sign in to your account</p>
             </div>
 
-            <div className="auth-field">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label className="auth-label">Password</label>
-                <a href="#" className="auth-forgot">Forgot password?</a>
+            {error && (
+              <div className="auth-error">
+                <AlertCircle size={16} />
+                <span>{error}</span>
               </div>
-              <div className="auth-input-wrapper">
-                <Lock size={18} className="auth-input-icon" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  className="auth-input"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  className="auth-input-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
+            )}
+
+            <form onSubmit={handleSubmit} className="auth-form">
+              <div className="auth-field">
+                <label className="auth-label">Employee ID</label>
+                <div className="auth-input-wrapper">
+                  <User size={18} className="auth-input-icon" />
+                  <input
+                    type="text"
+                    className="auth-input"
+                    placeholder="e.g. EMP001"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    autoComplete="username"
+                  />
+                </div>
               </div>
+
+              <div className="auth-field">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <label className="auth-label">Password</label>
+                  <a href="#" className="auth-forgot">Forgot password?</a>
+                </div>
+                <div className="auth-input-wrapper">
+                  <Lock size={18} className="auth-input-icon" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    className="auth-input"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    className="auth-input-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" className="auth-submit" disabled={isLoading}>
+                {isLoading ? 'Signing in...' : 'Sign in'}
+              </button>
+            </form>
+
+            <div className="auth-demo-info" style={{ marginTop: '24px' }}>
+              <p style={{ fontWeight: 600, marginBottom: '6px' }}>Demo Accounts:</p>
+              <p><code>EMP001</code> / <code>admin123</code> <span style={{ opacity: 0.6 }}>— Super Admin</span></p>
+              <p><code>EMP002</code> / <code>hr123</code> <span style={{ opacity: 0.6 }}>— Admin (HR)</span></p>
+              <p><code>EMP003</code> / <code>demo123</code> <span style={{ opacity: 0.6 }}>— Employee</span></p>
             </div>
 
-            <button type="submit" className="auth-submit" disabled={isLoading}>
-              {isLoading ? 'Signing in...' : 'Sign in'}
-            </button>
-          </form>
-
-          <div className="auth-demo-info">
-            <p style={{ fontWeight: 600, marginBottom: '6px' }}>Demo Accounts:</p>
-            <p><code>EMP001</code> / <code>admin123</code> <span style={{ opacity: 0.6 }}>— Super Admin</span></p>
-            <p><code>EMP002</code> / <code>hr123</code> <span style={{ opacity: 0.6 }}>— Admin (HR)</span></p>
-            <p><code>EMP003</code> / <code>demo123</code> <span style={{ opacity: 0.6 }}>— Employee</span></p>
+            <p className="auth-form-footer" style={{ marginTop: '24px', textAlign: 'center' }}>
+              Don't have an account?{' '}
+              <Link to="/signup" className="auth-link">Create account</Link>
+            </p>
           </div>
-
-          <p className="auth-form-footer">
-            Don't have an account?{' '}
-            <Link to="/signup" className="auth-link">Create account</Link>
-          </p>
         </div>
       </div>
     </div>
