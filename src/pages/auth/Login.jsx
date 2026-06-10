@@ -49,14 +49,14 @@ export default function Login() {
       <div className="auth-centered">
         <div className="auth-card">
           {/* Logo */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', width: '100%', marginBottom: '32px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '4px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start', textAlign: 'left', width: '100%', marginBottom: '32px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '12px', marginBottom: '4px' }}>
               <div className="auth-logo-icon">H</div>
               <span style={{ fontSize: '1.9rem', fontWeight: 800, background: 'linear-gradient(135deg, var(--color-primary), #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.5px' }}>Humanova</span>
             </div>
-            <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '20px', textAlign: 'center' }}>Transforming HR Experience</p>
-            <h2 className="auth-form-title" style={{ marginBottom: '6px', textAlign: 'center' }}>Welcome Back</h2>
-            <p className="auth-form-subtitle" style={{ textAlign: 'center' }}>Sign in to your Humanova account</p>
+            <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '20px', textAlign: 'left' }}>Transforming HR Experience</p>
+            <h2 className="auth-form-title" style={{ marginBottom: '6px', textAlign: 'left' }}>Welcome Back</h2>
+            <p className="auth-form-subtitle" style={{ textAlign: 'left' }}>Sign in to your Humanova account</p>
           </div>
 
           {error && (
