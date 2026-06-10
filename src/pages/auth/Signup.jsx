@@ -137,7 +137,7 @@ export default function Signup() {
             {step === 1 ? (
               <>
                 <h2 className="auth-form-title" style={{ marginBottom: '6px' }}>Create Account</h2>
-                <p className="auth-form-subtitle">Register to access your HRIS dashboard</p>
+                <p className="auth-form-subtitle">Register to access your Humanova dashboard</p>
               </>
             ) : (
               <>

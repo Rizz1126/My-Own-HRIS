@@ -247,7 +247,7 @@ export default function Payslips() {
               </div>
 
               <div className="payslip-header">
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-primary)' }}>HRIS Company</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-primary)' }}>Humanova</div>
                 <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '4px' }}>Pay Slip — {selected.period}</div>
               </div>
 

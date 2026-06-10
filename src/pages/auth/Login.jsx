@@ -50,11 +50,12 @@ export default function Login() {
         <div className="auth-card">
           {/* Logo */}
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <div className="auth-logo" style={{ justifyContent: 'center', marginBottom: '16px' }}>
-              <div className="auth-logo-icon">H</div>
+            <div className="auth-logo" style={{ justifyContent: 'center', marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
+              <div className="auth-logo-icon" style={{ marginRight: '10px' }}>H</div>
+              <span style={{ fontSize: '1.8rem', fontWeight: 800, background: 'linear-gradient(135deg, var(--color-primary), #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.5px' }}>Humanova</span>
             </div>
             <h2 className="auth-form-title" style={{ marginBottom: '6px' }}>Welcome Back</h2>
-            <p className="auth-form-subtitle">Sign in to your HRIS account</p>
+            <p className="auth-form-subtitle">Sign in to your Humanova account</p>
           </div>
 
           {error && (

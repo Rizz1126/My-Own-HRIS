@@ -171,7 +171,7 @@ export default function TopBar({ collapsed, theme, onToggleTheme, onMobileOpen }
               </div>
             )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+            <div className="topbar-user-info" style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
               <span style={{ fontWeight: 700, fontSize: '0.88rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>
                 {displayName}
               </span>

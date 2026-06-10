@@ -53,7 +53,7 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose
         <div className="sidebar-header">
           <div className="sidebar-logo">H</div>
           <div className="sidebar-brand">
-            <span className="sidebar-brand-name">HRIS</span>
+            <span className="sidebar-brand-name">Humanova</span>
             <span className="sidebar-brand-sub">Dashboard</span>
           </div>
         </div>
