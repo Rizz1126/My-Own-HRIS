@@ -1,9 +1,6 @@
 {
   "name": "dashboard-hris-ai",
   "private": true,
-  "workspaces": [
-    "backend"
-  ],
   "version": "0.0.0",
   "type": "module",
   "scripts": {
