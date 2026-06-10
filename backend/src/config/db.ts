@@ -5,9 +5,9 @@ import * as schema from '../db/schema.js';
 // In Vercel, environment variables are available directly
 // In local development, dotenv loads them
 if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
-  const dotenv = require('dotenv');
-  const path = require('path');
-  dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+  const dotenv = await import('dotenv');
+  const path = await import('path');
+  dotenv.default.config({ path: path.resolve(process.cwd(), 'backend', '.env') });
 }
 
 // Use POSTGRES_URL (Supabase) or DATABASE_URL as fallback
