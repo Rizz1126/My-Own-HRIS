@@ -58,7 +58,7 @@ export default function NotificationPanel({ onClose }) {
             time: a.createdAt,
             badge: a.priority,
             badgeColor: a.priority === 'High' ? '#EF4444' : a.priority === 'Low' ? '#10B981' : '#6366F1',
-            action: () => navigate('/'),
+            action: () => navigate(`/?announcement=${a.id}`),
           });
         });
       } catch {}

@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Megaphone, Bell, Plus, Edit3, Trash2, X, LogIn, Clock, Shield, ChevronRight, Sparkles, Calendar } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { api } from '../utils/api';
@@ -36,7 +37,31 @@ export default function Lounge() {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [formData, setFormData] = useState({ title: '', content: '', priority: 'Normal' });
   const [showRoomModal, setShowRoomModal] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [viewingAnnouncement, setViewingAnnouncement] = useState(null);
   const [workSession, setWorkSession] = useState(null);
+
+  useEffect(() => {
+    if (announcements.length > 0) {
+      const paramId = searchParams.get('announcement');
+      if (paramId) {
+        const found = announcements.find(a => String(a.id) === paramId);
+        if (found) setViewingAnnouncement(found);
+      } else {
+        setViewingAnnouncement(null);
+      }
+    }
+  }, [searchParams, announcements]);
+
+  const closeViewModal = () => {
+    setViewingAnnouncement(null);
+    setSearchParams(new URLSearchParams());
+  };
+
+  const handleCardClick = (a, e) => {
+    if (e.target.closest('button')) return;
+    setSearchParams({ announcement: a.id });
+  };
 
   useEffect(() => {
     if (!showRoomModal) {
@@ -284,14 +309,16 @@ export default function Lounge() {
             {announcements.slice(0, 5).map(a => (
               <div
                 key={a.id}
+                onClick={(e) => handleCardClick(a, e)}
                 style={{
                   padding: '16px', borderRadius: '14px',
                   background: 'var(--bg-secondary)',
                   border: '1px solid var(--border-color)',
                   transition: 'all 0.2s',
+                  cursor: 'pointer',
                 }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = PRIORITY_STYLES[a.priority].dot}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border-color)'}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = PRIORITY_STYLES[a.priority].dot; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.transform = 'translateY(0)'; }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', alignItems: 'flex-start' }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
@@ -438,6 +465,52 @@ export default function Lounge() {
             <div className="modal-footer" style={{ justifyContent: 'center' }}>
               <button className="btn btn-secondary" onClick={() => setDeleteConfirm(null)}>Cancel</button>
               <button className="btn btn-danger" onClick={() => handleDelete(deleteConfirm)}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── View Announcement Modal ─────────────────────────── */}
+      {viewingAnnouncement && (
+        <div className="modal-overlay" onClick={closeViewModal} style={{ zIndex: 9999 }}>
+          <div className="modal-container modal-md" onClick={e => e.stopPropagation()}>
+            <div className="modal-header" style={{ borderBottom: 'none', paddingBottom: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: 10, height: 10, borderRadius: '50%', background: PRIORITY_STYLES[viewingAnnouncement.priority].dot }} />
+                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: PRIORITY_STYLES[viewingAnnouncement.priority].color }}>
+                  {viewingAnnouncement.priority} Priority
+                </span>
+              </div>
+              <button className="modal-close" onClick={closeViewModal}><X size={20} /></button>
+            </div>
+            <div className="modal-body">
+              <h2 style={{ fontSize: '1.4rem', fontWeight: 800, marginTop: '8px', marginBottom: '16px', color: 'var(--text-primary)', lineHeight: 1.3 }}>
+                {viewingAnnouncement.title}
+              </h2>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', paddingBottom: '20px', borderBottom: '1px solid var(--border-color)' }}>
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 700 }}>
+                  {(viewingAnnouncement.creatorName || 'HR').substring(0, 1).toUpperCase()}
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{viewingAnnouncement.creatorName || 'HR Department'}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{formatDate(viewingAnnouncement.createdAt)}</div>
+                </div>
+              </div>
+
+              <div style={{ 
+                fontSize: '0.95rem', 
+                color: 'var(--text-secondary)', 
+                lineHeight: 1.7, 
+                whiteSpace: 'pre-wrap' 
+              }}>
+                {viewingAnnouncement.content}
+              </div>
+            </div>
+            <div className="modal-footer" style={{ borderTop: 'none', paddingTop: 0 }}>
+              <button className="btn btn-primary" onClick={closeViewModal} style={{ width: '100%' }}>
+                Tutup Pengumuman
+              </button>
             </div>
           </div>
         </div>
