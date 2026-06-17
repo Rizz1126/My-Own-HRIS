@@ -3,11 +3,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronRight, PanelLeftClose, PanelLeft } from 'lucide-react';
 import { NAV_ITEMS } from '../../utils/constants';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 
 export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { hasAccess, user } = useAuth();
+  const toast = useToast();
   const [openMenus, setOpenMenus] = useState({});
 
   const toggleMenu = (id) => {

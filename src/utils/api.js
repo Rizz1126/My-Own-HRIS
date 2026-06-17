@@ -5,6 +5,12 @@ const BASE_URL = import.meta.env.PROD ? '/api' : (import.meta.env.VITE_API_URL |
  * Basic wrapper around the native fetch API for making JSON requests.
  */
 export async function apiFetch(endpoint, options = {}) {
+  if (options.method && options.method !== 'GET' && !endpoint.includes('/auth')) {
+    if (sessionStorage.getItem('hris-visitor-mode') === 'true') {
+      throw new Error('Akses Pelanggaran: Anda login sebagai Visitor. Tidak diizinkan melakukan perubahan data.');
+    }
+  }
+
   const url = `${BASE_URL}${endpoint}`;
   const defaultHeaders = {
     'Content-Type': 'application/json',

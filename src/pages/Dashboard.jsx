@@ -130,8 +130,8 @@ export default function Dashboard() {
   const dynamicDeptStats = (() => {
     const map = {};
     (employees || []).forEach(e => {
-      if (empStatusFilter === 'Active' && e.status === 'Inactive') return;
-      if (empStatusFilter === 'Inactive' && e.status !== 'Inactive') return;
+      if (empStatusFilter === 'Active' && e.active === false) return;
+      if (empStatusFilter === 'Inactive' && e.active !== false) return;
       
       const deptName = typeof e.department === 'string' ? e.department : e.department?.name || 'Unknown';
       if (!map[deptName]) map[deptName] = 0;

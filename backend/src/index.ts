@@ -6,7 +6,10 @@ import path from 'path';
 
 // Load env only in development
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config({ path: path.resolve(__dirname, '../.env') });
+  const envPath = process.cwd().endsWith('backend') 
+    ? path.resolve(process.cwd(), '.env') 
+    : path.resolve(process.cwd(), 'backend', '.env');
+  dotenv.config({ path: envPath });
 }
 
 const app = express();

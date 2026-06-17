@@ -7,7 +7,10 @@ import * as schema from '../db/schema.js';
 if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
   const dotenv = await import('dotenv');
   const path = await import('path');
-  dotenv.default.config({ path: path.resolve(process.cwd(), 'backend', '.env') });
+  const envPath = process.cwd().endsWith('backend') 
+    ? path.resolve(process.cwd(), '.env') 
+    : path.resolve(process.cwd(), 'backend', '.env');
+  dotenv.default.config({ path: envPath });
 }
 
 // Use POSTGRES_URL (Supabase) or DATABASE_URL as fallback

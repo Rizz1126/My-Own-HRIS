@@ -21,6 +21,13 @@ export class AttendanceService {
     .where(eq(attendances.date, date));
   }
 
+  static async getEmployeeAttendance(employeeId: string) {
+    return await db.select()
+      .from(attendances)
+      .where(eq(attendances.employeeId, employeeId))
+      .orderBy(desc(attendances.date));
+  }
+
   static async checkIn(employeeId: string) {
     const today = new Date().toISOString().split('T')[0];
     

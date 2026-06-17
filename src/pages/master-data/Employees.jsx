@@ -166,7 +166,11 @@ export default function Employees() {
 
   const filtered = employeesData.filter((emp) => {
     const matchSearch = emp.name?.toLowerCase().includes(search.toLowerCase()) || emp.idNumber?.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = statusFilter === 'All' || emp.status === statusFilter;
+    const matchStatus = 
+      statusFilter === 'All' ? true :
+      statusFilter === 'Active' ? emp.active === true :
+      statusFilter === 'Inactive' ? emp.active === false :
+      emp.status === statusFilter;
     return matchSearch && matchStatus;
   });
 
@@ -333,6 +337,8 @@ export default function Employees() {
         </div>
         <select className="filter-select" value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}>
           <option value="All">All Status</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
           <option value="Contract Fulltime">Contract Fulltime</option>
           <option value="Contract Part-time">Contract Part-time</option>
           <option value="Internship">Internship</option>

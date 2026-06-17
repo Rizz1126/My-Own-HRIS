@@ -3,6 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Eye, EyeOff, Lock, AlertCircle, User } from 'lucide-react';
 
+// Feature Flag untuk Visitor View (Bisa dipasang/copot dengan mengubah nilai true/false)
+const ENABLE_VISITOR_VIEW = true;
+
 export default function Login() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
@@ -14,6 +17,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    sessionStorage.removeItem('hris-visitor-mode');
     setError('');
     setIsLoading(true);
 
@@ -134,14 +138,68 @@ export default function Login() {
               <button type="submit" className="auth-submit" disabled={isLoading}>
                 {isLoading ? 'Signing in...' : 'Sign in'}
               </button>
-            </form>
 
-            <div className="auth-demo-info" style={{ marginTop: '24px' }}>
-              <p style={{ fontWeight: 600, marginBottom: '6px' }}>Demo Accounts:</p>
-              <p><code>EMP001</code> / <code>admin123</code> <span style={{ opacity: 0.6 }}>— Super Admin</span></p>
-              <p><code>EMP002</code> / <code>hr123</code> <span style={{ opacity: 0.6 }}>— Admin (HR)</span></p>
-              <p><code>EMP003</code> / <code>demo123</code> <span style={{ opacity: 0.6 }}>— Employee</span></p>
-            </div>
+              {ENABLE_VISITOR_VIEW && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
+                  <button 
+                    type="button" 
+                    className="auth-submit" 
+                    style={{ 
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)', 
+                      border: '1px solid rgba(255, 255, 255, 0.3)', 
+                      color: 'white',
+                      boxShadow: 'none'
+                    }}
+                    onClick={async () => {
+                      setIsLoading(true);
+                      try {
+                        const result = await loginWithCredentials('EMP001', 'admin123');
+                        if (result.success) {
+                          sessionStorage.setItem('hris-visitor-mode', 'true');
+                          navigate('/');
+                        } else {
+                          setError(result.error);
+                        }
+                      } catch (err) {
+                        setError('An unexpected error occurred');
+                      }
+                      setIsLoading(false);
+                    }}
+                    disabled={isLoading}
+                  >
+                    Continue as Visitor (Super Admin)
+                  </button>
+                  <button 
+                    type="button" 
+                    className="auth-submit" 
+                    style={{ 
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)', 
+                      border: '1px solid rgba(255, 255, 255, 0.3)', 
+                      color: 'white',
+                      boxShadow: 'none'
+                    }}
+                    onClick={async () => {
+                      setIsLoading(true);
+                      try {
+                        const result = await loginWithCredentials('EMP003', 'demo123');
+                        if (result.success) {
+                          sessionStorage.setItem('hris-visitor-mode', 'true');
+                          navigate('/');
+                        } else {
+                          setError(result.error);
+                        }
+                      } catch (err) {
+                        setError('An unexpected error occurred');
+                      }
+                      setIsLoading(false);
+                    }}
+                    disabled={isLoading}
+                  >
+                    Continue as Visitor (Employee)
+                  </button>
+                </div>
+              )}
+            </form>
 
             <p className="auth-form-footer" style={{ marginTop: '24px', textAlign: 'center' }}>
               Don't have an account?{' '}

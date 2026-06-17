@@ -13,6 +13,15 @@ router.get('/today', async (req, res) => {
   }
 });
 
+router.get('/employee/:employeeId', async (req, res) => {
+  try {
+    const records = await AttendanceService.getEmployeeAttendance(req.params.employeeId);
+    res.json(records);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch attendance history' });
+  }
+});
+
 router.post('/check-in', async (req, res) => {
   try {
     const { employeeId } = req.body;

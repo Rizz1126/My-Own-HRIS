@@ -45,6 +45,8 @@ import Assessment from './pages/talent/Assessment';
 import CareerPath from './pages/talent/CareerPath';
 
 // Employee Self-Service
+import MyAttendance from './pages/ess/MyAttendance';
+import MyPayslips from './pages/ess/MyPayslips';
 import Reimbursement from './pages/ess/Reimbursement';
 import MyAssessments from './pages/ess/MyAssessments';
 import MyProfile from './pages/ess/MyProfile';
@@ -118,6 +120,8 @@ export default function App() {
             <Route path="/talent/career-path" element={<CareerPath />} />
 
             {/* Employee Self-Service */}
+            <Route path="/ess/my-attendance" element={<MyAttendance />} />
+            <Route path="/ess/my-payslips" element={<MyPayslips />} />
             <Route path="/ess/reimbursement" element={<Reimbursement />} />
             <Route path="/ess/my-assessments" element={<MyAssessments />} />
             <Route path="/ess/my-profile" element={<MyProfile />} />
