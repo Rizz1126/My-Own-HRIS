@@ -318,4 +318,56 @@ export const notifications = pgTable('notifications', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
+// --- OKR / GOALS ---
+
+export const objectives = pgTable('objectives', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: varchar('title', { length: 500 }).notNull(),
+  description: text('description'),
+  level: varchar('level', { length: 20 }).notNull(),       // 'company' | 'department' | 'individual'
+  period: varchar('period', { length: 50 }).notNull(),      // 'Q1 2026', 'Q2 2026', etc
+  status: varchar('status', { length: 30 }).default('Draft'),  // Draft, Active, Completed, Cancelled
+  progress: numeric('progress').default('0'),               // 0.0 - 1.0 (auto-calculated)
+
+  // Ownership
+  ownerId: varchar('owner_id', { length: 50 }).references(() => employees.id),
+  departmentId: uuid('department_id').references(() => departments.id),
+
+  // Alignment (cascading) — self-referencing
+  parentObjectiveId: uuid('parent_objective_id'),
+
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const keyResults = pgTable('key_results', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  objectiveId: uuid('objective_id').notNull().references(() => objectives.id),
+  metricName: varchar('metric_name', { length: 500 }).notNull(),
+  unit: varchar('unit', { length: 50 }).default(''),        // '%', 'IDR', 'count', 'score'
+  initialValue: numeric('initial_value').default('0'),
+  targetValue: numeric('target_value').notNull(),
+  currentValue: numeric('current_value').default('0'),
+  weight: numeric('weight').default('1'),                    // relative weight between KRs
+  confidence: varchar('confidence', { length: 20 }).default('On Track'), // On Track, At Risk, Off Track
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const okrCheckIns = pgTable('okr_check_ins', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  keyResultId: uuid('key_result_id').notNull().references(() => keyResults.id),
+  value: numeric('value').notNull(),
+  comment: text('comment'),
+  confidence: varchar('confidence', { length: 20 }).default('On Track'),
+  createdBy: varchar('created_by', { length: 50 }).references(() => employees.id),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const okrAlignments = pgTable('okr_alignments', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  childObjectiveId: uuid('child_objective_id').notNull().references(() => objectives.id),
+  parentObjectiveId: uuid('parent_objective_id').notNull().references(() => objectives.id),
+});
+
 // Relations can be defined here...
+

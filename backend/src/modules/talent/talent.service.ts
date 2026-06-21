@@ -1,6 +1,8 @@
 import { eq, and, sql, or } from 'drizzle-orm';
 import { db } from '../../config/db.js';
-import { jobOpenings, candidates, departments, onboardingTasks, employees, assessments, assessmentScores, careerTracks, careerLevels, employeeCareerProgress } from '../../db/schema.js';
+import { jobOpenings, candidates, departments, onboardingTasks, employees, assessments, assessmentScores, careerTracks, careerLevels, employeeCareerProgress, users } from '../../db/schema.js';
+import { EmployeeService } from '../employees/employees.service.js';
+import crypto from 'crypto';
 
 const DEFAULT_ONBOARDING_TASKS = [
   'Complete HR paperwork & employment contract signing',
@@ -93,6 +95,62 @@ export class TalentService {
     }
 
     return { success: true, candidate: updatedCandidate };
+  }
+
+  static async getCandidateForOnboarding(candidateId: string) {
+    const result = await db.select()
+      .from(candidates)
+      .where(eq(candidates.id, candidateId));
+    if (result.length === 0) throw new Error('Candidate not found');
+    
+    // Allow Applied, Screening, Interview, Offered. Block Hired/Rejected.
+    if (['Hired', 'Rejected'].includes(result[0].stage || '')) {
+      throw new Error('Onboarding link is expired or invalid');
+    }
+    return result[0];
+  }
+
+  static async processOnboardingSubmission(candidateId: string, payload: any) {
+    // 1. Verify candidate exists and is valid
+    const candidate = await this.getCandidateForOnboarding(candidateId);
+    
+    // 2. Create User account first so we can link it
+    const userId = crypto.randomUUID();
+    const [newUser] = await db.insert(users).values({
+      id: userId,
+      name: candidate.name,
+      email: candidate.email,
+      role: 'Employee'
+    }).returning();
+
+    // 3. Create Employee using EmployeeService
+    const employeeId = await EmployeeService.generateNik();
+    const newEmployee = await EmployeeService.createEmployee({
+      id: employeeId,
+      userId: newUser.id,
+      name: candidate.name,
+      email: candidate.email,
+      position: payload.position || 'Employee', // Usually set by admin, fallback to generic
+      departmentId: payload.departmentId || null,
+      baseSalary: payload.baseSalary || 0,
+      joinDate: new Date().toISOString().split('T')[0],
+      phone: payload.phone,
+      address: payload.address,
+      dateOfBirth: payload.dateOfBirth,
+      maritalStatus: payload.maritalStatus,
+      dependents: parseInt(payload.dependents) || 0,
+      emergencyContact: payload.emergencyContact,
+      emergencyPhone: payload.emergencyPhone,
+      bankName: payload.bankName,
+      bankAccountNumber: payload.bankAccountNumber,
+      active: true,
+      status: 'Active'
+    });
+
+    // 4. Hire candidate (changes stage to Hired and creates onboarding tasks)
+    await this.hireCandidate(candidate.id, newEmployee.id);
+
+    return { success: true, employee: newEmployee, user: newUser };
   }
 
   // Onboarding

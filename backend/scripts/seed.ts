@@ -18,6 +18,7 @@ async function main() {
     // 1. Clear existing data (in reverse order of dependencies)
     console.log('🧹 Cleaning up old data...');
     const tables = [
+      schema.okrCheckIns, schema.okrAlignments, schema.keyResults, schema.objectives,
       schema.notifications, schema.reimbursements, schema.payslips, schema.assessmentScores, schema.assessments, 
       schema.employeeCareerProgress, schema.careerLevels, schema.overtimeRequests, schema.leaveRequests, 
       schema.attendances, schema.employeeSchedules, schema.onboardingTasks, schema.assignments,
@@ -262,6 +263,127 @@ async function main() {
       { title: 'Server Maintenance', content: 'Our main application servers will be undergoing maintenance this Saturday from 2 AM to 4 AM.', priority: 'High', createdBy: createdEmployees[0].id },
     ];
     if (announcementData.length > 0) await db.insert(schema.announcements).values(announcementData);
+
+    // 15. OKR Data
+    console.log('🎯 Creating OKR data...');
+    const currentYear = new Date().getFullYear();
+    const currentQ = `Q${Math.ceil((new Date().getMonth() + 1) / 3)} ${currentYear}`;
+
+    // Company-level objectives
+    const companyObjs = await db.insert(schema.objectives).values([
+      { title: 'Achieve 30% revenue growth through enterprise expansion', description: 'Focus on acquiring enterprise-level clients and increasing ARPU.', level: 'company', period: currentQ, status: 'Active', progress: '0.55' },
+      { title: 'Build a world-class engineering culture', description: 'Invest in developer experience, reduce tech debt, and improve deployment velocity.', level: 'company', period: currentQ, status: 'Active', progress: '0.42' },
+      { title: 'Become the employer of choice in the tech industry', description: 'Improve employer branding, reduce turnover, and increase eNPS.', level: 'company', period: currentQ, status: 'Active', progress: '0.38' },
+    ]).returning();
+
+    // Company KRs
+    const companyKRs = await db.insert(schema.keyResults).values([
+      { objectiveId: companyObjs[0].id, metricName: 'New enterprise clients acquired', unit: 'count', initialValue: '0', targetValue: '15', currentValue: '8', confidence: 'On Track' },
+      { objectiveId: companyObjs[0].id, metricName: 'Monthly recurring revenue', unit: 'IDR', initialValue: '500000000', targetValue: '1000000000', currentValue: '780000000', confidence: 'On Track' },
+      { objectiveId: companyObjs[0].id, metricName: 'Customer churn rate', unit: '%', initialValue: '8', targetValue: '3', currentValue: '5', confidence: 'At Risk' },
+      { objectiveId: companyObjs[1].id, metricName: 'Deployment frequency (per week)', unit: 'count', initialValue: '2', targetValue: '10', currentValue: '6', confidence: 'On Track' },
+      { objectiveId: companyObjs[1].id, metricName: 'Code review turnaround (hours)', unit: 'hours', initialValue: '24', targetValue: '4', currentValue: '8', confidence: 'At Risk' },
+      { objectiveId: companyObjs[1].id, metricName: 'Tech debt reduction (story points)', unit: 'points', initialValue: '0', targetValue: '200', currentValue: '80', confidence: 'On Track' },
+      { objectiveId: companyObjs[2].id, metricName: 'Employee NPS score', unit: 'score', initialValue: '30', targetValue: '70', currentValue: '48', confidence: 'On Track' },
+      { objectiveId: companyObjs[2].id, metricName: 'Voluntary turnover rate', unit: '%', initialValue: '15', targetValue: '5', currentValue: '9', confidence: 'At Risk' },
+      { objectiveId: companyObjs[2].id, metricName: 'Offer acceptance rate', unit: '%', initialValue: '60', targetValue: '90', currentValue: '75', confidence: 'On Track' },
+    ]).returning();
+
+    // Department-level objectives
+    const deptObjs = await db.insert(schema.objectives).values([
+      { title: 'Deliver scalable API platform for enterprise clients', level: 'department', period: currentQ, status: 'Active', progress: '0.60', departmentId: depts[0].id, parentObjectiveId: companyObjs[0].id },
+      { title: 'Implement CI/CD pipeline and automated testing', level: 'department', period: currentQ, status: 'Active', progress: '0.45', departmentId: depts[0].id, parentObjectiveId: companyObjs[1].id },
+      { title: 'Launch employer branding campaign', level: 'department', period: currentQ, status: 'Active', progress: '0.30', departmentId: depts[1].id, parentObjectiveId: companyObjs[2].id },
+      { title: 'Increase qualified leads by 50%', level: 'department', period: currentQ, status: 'Active', progress: '0.52', departmentId: depts[3].id, parentObjectiveId: companyObjs[0].id },
+      { title: 'Optimize financial reporting and cost control', level: 'department', period: currentQ, status: 'Active', progress: '0.65', departmentId: depts[5].id, parentObjectiveId: companyObjs[0].id },
+      { title: 'Launch new product vertical for healthcare', level: 'department', period: currentQ, status: 'Active', progress: '0.35', departmentId: depts[2].id, parentObjectiveId: companyObjs[0].id },
+    ]).returning();
+
+    // Department alignments
+    await db.insert(schema.okrAlignments).values([
+      { childObjectiveId: deptObjs[0].id, parentObjectiveId: companyObjs[0].id },
+      { childObjectiveId: deptObjs[1].id, parentObjectiveId: companyObjs[1].id },
+      { childObjectiveId: deptObjs[2].id, parentObjectiveId: companyObjs[2].id },
+      { childObjectiveId: deptObjs[3].id, parentObjectiveId: companyObjs[0].id },
+      { childObjectiveId: deptObjs[4].id, parentObjectiveId: companyObjs[0].id },
+      { childObjectiveId: deptObjs[5].id, parentObjectiveId: companyObjs[0].id },
+    ]);
+
+    // Department KRs
+    const deptKRs = await db.insert(schema.keyResults).values([
+      { objectiveId: deptObjs[0].id, metricName: 'API endpoints delivered', unit: 'count', initialValue: '0', targetValue: '50', currentValue: '30', confidence: 'On Track' },
+      { objectiveId: deptObjs[0].id, metricName: 'API latency p95 (ms)', unit: 'ms', initialValue: '500', targetValue: '100', currentValue: '180', confidence: 'At Risk' },
+      { objectiveId: deptObjs[1].id, metricName: 'Test coverage', unit: '%', initialValue: '40', targetValue: '85', currentValue: '62', confidence: 'On Track' },
+      { objectiveId: deptObjs[1].id, metricName: 'Build success rate', unit: '%', initialValue: '75', targetValue: '98', currentValue: '88', confidence: 'On Track' },
+      { objectiveId: deptObjs[2].id, metricName: 'Glassdoor rating', unit: 'score', initialValue: '3.2', targetValue: '4.5', currentValue: '3.6', confidence: 'At Risk' },
+      { objectiveId: deptObjs[2].id, metricName: 'Social media followers', unit: 'count', initialValue: '5000', targetValue: '15000', currentValue: '7200', confidence: 'On Track' },
+      { objectiveId: deptObjs[3].id, metricName: 'Marketing qualified leads', unit: 'count', initialValue: '100', targetValue: '250', currentValue: '165', confidence: 'On Track' },
+      { objectiveId: deptObjs[4].id, metricName: 'Monthly close cycle (days)', unit: 'days', initialValue: '15', targetValue: '5', currentValue: '8', confidence: 'On Track' },
+      { objectiveId: deptObjs[5].id, metricName: 'Healthcare beta users', unit: 'count', initialValue: '0', targetValue: '20', currentValue: '7', confidence: 'On Track' },
+    ]).returning();
+
+    // Individual-level objectives
+    const individualObjs = await db.insert(schema.objectives).values([
+      { title: 'Design and implement microservices architecture', level: 'individual', period: currentQ, status: 'Active', progress: '0.70', ownerId: createdEmployees[2]?.id, parentObjectiveId: deptObjs[0].id },
+      { title: 'Set up automated E2E testing pipeline', level: 'individual', period: currentQ, status: 'Active', progress: '0.45', ownerId: createdEmployees[3]?.id, parentObjectiveId: deptObjs[1].id },
+      { title: 'Redesign employee onboarding experience', level: 'individual', period: currentQ, status: 'Active', progress: '0.55', ownerId: createdEmployees[1]?.id, parentObjectiveId: deptObjs[2].id },
+      { title: 'Develop content marketing strategy', level: 'individual', period: currentQ, status: 'Active', progress: '0.40', ownerId: createdEmployees[4]?.id, parentObjectiveId: deptObjs[3].id },
+      { title: 'Automate monthly financial reconciliation', level: 'individual', period: currentQ, status: 'Active', progress: '0.80', ownerId: createdEmployees[5]?.id, parentObjectiveId: deptObjs[4].id },
+      { title: 'Build healthcare module MVP', level: 'individual', period: currentQ, status: 'Active', progress: '0.30', ownerId: createdEmployees[0]?.id, parentObjectiveId: deptObjs[5].id },
+      { title: 'Reduce bug backlog by 60%', level: 'individual', period: currentQ, status: 'Active', progress: '0.55', ownerId: createdEmployees[6]?.id, parentObjectiveId: deptObjs[1].id },
+      { title: 'Improve API documentation coverage', level: 'individual', period: currentQ, status: 'Active', progress: '0.65', ownerId: createdEmployees[7]?.id, parentObjectiveId: deptObjs[0].id },
+    ]).returning();
+
+    // Individual alignments
+    const indAlignments = individualObjs.map(obj => ({
+      childObjectiveId: obj.id,
+      parentObjectiveId: obj.parentObjectiveId!,
+    })).filter(a => a.parentObjectiveId);
+    if (indAlignments.length > 0) await db.insert(schema.okrAlignments).values(indAlignments);
+
+    // Individual KRs
+    const indKRs = await db.insert(schema.keyResults).values([
+      { objectiveId: individualObjs[0].id, metricName: 'Services migrated to microservices', unit: 'count', initialValue: '0', targetValue: '8', currentValue: '6', confidence: 'On Track' },
+      { objectiveId: individualObjs[0].id, metricName: 'Service uptime', unit: '%', initialValue: '95', targetValue: '99.9', currentValue: '99.2', confidence: 'On Track' },
+      { objectiveId: individualObjs[1].id, metricName: 'E2E test scenarios automated', unit: 'count', initialValue: '0', targetValue: '100', currentValue: '45', confidence: 'At Risk' },
+      { objectiveId: individualObjs[2].id, metricName: 'Onboarding completion rate', unit: '%', initialValue: '60', targetValue: '95', currentValue: '78', confidence: 'On Track' },
+      { objectiveId: individualObjs[2].id, metricName: 'New hire satisfaction score', unit: 'score', initialValue: '3', targetValue: '4.5', currentValue: '3.8', confidence: 'On Track' },
+      { objectiveId: individualObjs[3].id, metricName: 'Blog posts published', unit: 'count', initialValue: '0', targetValue: '12', currentValue: '5', confidence: 'On Track' },
+      { objectiveId: individualObjs[3].id, metricName: 'Organic traffic increase', unit: '%', initialValue: '0', targetValue: '40', currentValue: '15', confidence: 'At Risk' },
+      { objectiveId: individualObjs[4].id, metricName: 'Reconciliation time saved (hours/month)', unit: 'hours', initialValue: '0', targetValue: '20', currentValue: '16', confidence: 'On Track' },
+      { objectiveId: individualObjs[5].id, metricName: 'MVP features completed', unit: 'count', initialValue: '0', targetValue: '15', currentValue: '5', confidence: 'At Risk' },
+      { objectiveId: individualObjs[6].id, metricName: 'Bugs resolved', unit: 'count', initialValue: '0', targetValue: '60', currentValue: '33', confidence: 'On Track' },
+      { objectiveId: individualObjs[7].id, metricName: 'API endpoints documented', unit: '%', initialValue: '30', targetValue: '100', currentValue: '75', confidence: 'On Track' },
+    ]).returning();
+
+    // Check-in history (simulate 6 weeks of check-ins for some KRs)
+    const checkInData: (typeof schema.okrCheckIns.$inferInsert)[] = [];
+    const sampleKRs = [companyKRs[0], companyKRs[1], deptKRs[0], indKRs[0], indKRs[2]];
+    const progressSteps = [
+      [1, 3, 5, 6, 7, 8],           // enterprise clients
+      [550000000, 620000000, 680000000, 720000000, 750000000, 780000000], // MRR
+      [5, 10, 16, 22, 26, 30],       // API endpoints
+      [1, 2, 3, 4, 5, 6],           // microservices migrated
+      [5, 12, 20, 28, 38, 45],      // E2E tests
+    ];
+
+    for (let krIdx = 0; krIdx < sampleKRs.length; krIdx++) {
+      const kr = sampleKRs[krIdx];
+      const steps = progressSteps[krIdx];
+      for (let week = 0; week < steps.length; week++) {
+        const d = new Date();
+        d.setDate(d.getDate() - (steps.length - week) * 7);
+        checkInData.push({
+          keyResultId: kr.id,
+          value: steps[week].toString(),
+          comment: week === steps.length - 1 ? 'Latest update — progressing well.' : `Week ${week + 1} check-in.`,
+          confidence: steps[week] / parseFloat(kr.targetValue) >= 0.5 ? 'On Track' : 'At Risk',
+          createdBy: createdEmployees[krIdx % createdEmployees.length]?.id,
+          createdAt: d,
+        });
+      }
+    }
+    if (checkInData.length > 0) await db.insert(schema.okrCheckIns).values(checkInData);
 
     console.log('✅ Seeding completed successfully!');
   } catch (error) {

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { TalentService } from './talent.service.js';
+import { OKRService } from './okr.service.js';
 
 const router = Router();
 
@@ -122,6 +123,25 @@ router.delete('/onboarding/:id', async (req, res) => {
     res.json(data);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
+  }
+});
+
+// Public Onboarding Form Endpoints
+router.get('/onboarding-form/:candidateId', async (req, res) => {
+  try {
+    const data = await TalentService.getCandidateForOnboarding(req.params.candidateId);
+    res.json({ success: true, data });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || 'Invalid or expired link' });
+  }
+});
+
+router.post('/onboarding-form/:candidateId/submit', async (req, res) => {
+  try {
+    const result = await TalentService.processOnboardingSubmission(req.params.candidateId, req.body);
+    res.json(result);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || 'Submission failed' });
   }
 });
 
@@ -282,4 +302,131 @@ router.delete('/career-levels/:id', async (req, res) => {
   }
 });
 
+// ──────────────── OKR ────────────────
+
+// Objectives
+router.get('/okr', async (req, res) => {
+  try {
+    const { period, level } = req.query as { period?: string; level?: string };
+    const data = await OKRService.getAllObjectives(period, level);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch objectives' });
+  }
+});
+
+router.get('/okr/tree', async (req, res) => {
+  try {
+    const { period } = req.query as { period?: string };
+    if (!period) return res.status(400).json({ error: 'period query parameter is required' });
+    const data = await OKRService.getObjectiveTree(period);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch objective tree' });
+  }
+});
+
+router.get('/okr/employee/:employeeId', async (req, res) => {
+  try {
+    const data = await OKRService.getObjectivesByEmployee(req.params.employeeId);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch employee objectives' });
+  }
+});
+
+router.get('/okr/department/:departmentId', async (req, res) => {
+  try {
+    const data = await OKRService.getObjectivesByDepartment(req.params.departmentId);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch department objectives' });
+  }
+});
+
+router.get('/okr/:id', async (req, res) => {
+  try {
+    const data = await OKRService.getObjectiveById(req.params.id);
+    if (!data) return res.status(404).json({ error: 'Objective not found' });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch objective detail' });
+  }
+});
+
+router.post('/okr', async (req, res) => {
+  try {
+    const data = await OKRService.createObjective(req.body);
+    res.status(201).json(data);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.patch('/okr/:id', async (req, res) => {
+  try {
+    const data = await OKRService.updateObjective(req.params.id, req.body);
+    res.json(data);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.delete('/okr/:id', async (req, res) => {
+  try {
+    const data = await OKRService.deleteObjective(req.params.id);
+    res.json(data);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Key Results
+router.post('/okr/:id/key-results', async (req, res) => {
+  try {
+    const data = await OKRService.createKeyResult(req.params.id, req.body);
+    res.status(201).json(data);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.patch('/okr/key-results/:id', async (req, res) => {
+  try {
+    const data = await OKRService.updateKeyResult(req.params.id, req.body);
+    res.json(data);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.delete('/okr/key-results/:id', async (req, res) => {
+  try {
+    const data = await OKRService.deleteKeyResult(req.params.id);
+    res.json(data);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Check-ins
+router.post('/okr/key-results/:id/check-in', async (req, res) => {
+  try {
+    const data = await OKRService.createCheckIn(req.params.id, req.body);
+    res.status(201).json(data);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.get('/okr/key-results/:id/history', async (req, res) => {
+  try {
+    const data = await OKRService.getCheckInHistory(req.params.id);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch check-in history' });
+  }
+});
+
 export default router;
+

@@ -78,6 +78,7 @@ export const NAV_ITEMS = [
       { id: 'onboarding', label: 'Onboarding', path: '/talent/onboarding', icon: ClipboardList },
       { id: 'assessment', label: 'Assessment', path: '/talent/assessment', icon: Star },
       { id: 'career-path', label: 'Career Path', path: '/talent/career-path', icon: TrendingUp },
+      { id: 'okr', label: 'OKR Management', path: '/talent/okr', icon: Target },
     ],
   },
   {
@@ -89,6 +90,7 @@ export const NAV_ITEMS = [
       { id: 'my-payslips', label: 'My Payslips', path: '/ess/my-payslips', icon: Receipt },
       { id: 'reimbursement', label: 'Reimbursement', path: '/ess/reimbursement', icon: CreditCard },
       { id: 'my-assessments', label: 'My Assessments', path: '/ess/my-assessments', icon: Star },
+      { id: 'my-okr', label: 'My OKR', path: '/ess/my-okr', icon: Target },
       { id: 'my-profile', label: 'My Profile', path: '/ess/my-profile', icon: User },
     ],
   },
@@ -128,12 +130,12 @@ export const ROLES = {
 };
 
 // Menu IDs each role can access (Includes both Parent and Child Submenus)
-const ALL_MODULES = ['lounge', 'dashboard', 'master-data', 'employees', 'contracts', 'assignments', 'projects', 'clients', 'organization', 'documents', 'attendance', 'presence', 'shifts', 'overtime', 'my-overtime', 'overtime-request', 'overtime-stats', 'overtime-processing', 'leave', 'leave-my', 'leave-calendar', 'leave-approval', 'payroll', 'calculation', 'tax', 'bpjs', 'payslips', 'talent', 'recruitment', 'recruitment-analytics', 'onboarding', 'assessment', 'career-path', 'ess', 'my-attendance', 'my-payslips', 'reimbursement', 'my-profile', 'analytics', 'turnover', 'attendance-heatmap', 'cost-prediction', 'admin', 'user-management'];
+const ALL_MODULES = ['lounge', 'dashboard', 'master-data', 'employees', 'contracts', 'assignments', 'projects', 'clients', 'organization', 'documents', 'attendance', 'presence', 'shifts', 'overtime', 'my-overtime', 'overtime-request', 'overtime-stats', 'overtime-processing', 'leave', 'leave-my', 'leave-calendar', 'leave-approval', 'payroll', 'calculation', 'tax', 'bpjs', 'payslips', 'talent', 'recruitment', 'recruitment-analytics', 'onboarding', 'assessment', 'career-path', 'okr', 'ess', 'my-attendance', 'my-payslips', 'reimbursement', 'my-profile', 'my-okr', 'analytics', 'turnover', 'attendance-heatmap', 'cost-prediction', 'admin', 'user-management'];
 
 export const ROLE_PERMISSIONS = {
   'Super Admin': [...ALL_MODULES],
   'Admin': [...ALL_MODULES],
-  'Employee': ['lounge', 'overtime', 'my-overtime', 'overtime-request', 'leave', 'leave-my', 'ess', 'my-attendance', 'my-payslips', 'reimbursement', 'my-assessments', 'my-profile'],
+  'Employee': ['lounge', 'overtime', 'my-overtime', 'overtime-request', 'leave', 'leave-my', 'ess', 'my-attendance', 'my-payslips', 'reimbursement', 'my-assessments', 'my-okr', 'my-profile'],
 };
 
 export const STATUS = {

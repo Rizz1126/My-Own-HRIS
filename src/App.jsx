@@ -9,6 +9,7 @@ import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import Dashboard from './pages/Dashboard';
 import Lounge from './pages/Lounge';
+import OnboardingForm from './pages/public/OnboardingForm';
 
 // Master Data
 import Employees from './pages/master-data/Employees';
@@ -43,6 +44,7 @@ import RecruitmentAnalytics from './pages/talent/RecruitmentAnalytics';
 import Onboarding from './pages/talent/Onboarding';
 import Assessment from './pages/talent/Assessment';
 import CareerPath from './pages/talent/CareerPath';
+import OKRBoard from './pages/talent/OKRBoard';
 
 // Employee Self-Service
 import MyAttendance from './pages/ess/MyAttendance';
@@ -50,6 +52,7 @@ import MyPayslips from './pages/ess/MyPayslips';
 import Reimbursement from './pages/ess/Reimbursement';
 import MyAssessments from './pages/ess/MyAssessments';
 import MyProfile from './pages/ess/MyProfile';
+import MyOKR from './pages/ess/MyOKR';
 
 // People Analytics
 import Turnover from './pages/analytics/Turnover';
@@ -69,6 +72,7 @@ export default function App() {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/onboarding/fill/:candidateId" element={<OnboardingForm />} />
 
           {/* Protected Routes */}
           <Route element={
@@ -118,6 +122,7 @@ export default function App() {
             <Route path="/talent/onboarding" element={<Onboarding />} />
             <Route path="/talent/assessment" element={<Assessment />} />
             <Route path="/talent/career-path" element={<CareerPath />} />
+            <Route path="/talent/okr" element={<OKRBoard />} />
 
             {/* Employee Self-Service */}
             <Route path="/ess/my-attendance" element={<MyAttendance />} />
@@ -125,6 +130,7 @@ export default function App() {
             <Route path="/ess/reimbursement" element={<Reimbursement />} />
             <Route path="/ess/my-assessments" element={<MyAssessments />} />
             <Route path="/ess/my-profile" element={<MyProfile />} />
+            <Route path="/ess/my-okr" element={<MyOKR />} />
 
             {/* People Analytics */}
             <Route path="/analytics/turnover" element={<Turnover />} />

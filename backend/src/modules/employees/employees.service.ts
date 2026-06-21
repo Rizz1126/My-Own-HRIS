@@ -109,7 +109,28 @@ export class EmployeeService {
     return emp;
   }
 
+  static async generateNik() {
+    // Find the latest employee by NIK
+    const latest = await db.select({ nik: employees.nik })
+      .from(employees)
+      .where(sql`${employees.nik} LIKE 'EMP%'`)
+      .orderBy(sql`${employees.nik} DESC`)
+      .limit(1);
+    
+    let nextNum = 1;
+    if (latest.length > 0 && latest[0].nik) {
+      const match = latest[0].nik.match(/EMP(\d+)/);
+      if (match) {
+        nextNum = parseInt(match[1], 10) + 1;
+      }
+    }
+    return `EMP${nextNum.toString().padStart(3, '0')}`;
+  }
+
   static async createEmployee(data: typeof employees.$inferInsert) {
+    if (!data.nik) {
+      data.nik = await this.generateNik();
+    }
     const result = await db.insert(employees).values(data).returning();
     return result[0];
   }

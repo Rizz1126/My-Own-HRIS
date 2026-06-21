@@ -3,8 +3,10 @@ import { Check, Plus, Trash2 } from 'lucide-react';
 import { getInitials, formatDate } from '../../utils/formatters';
 import { api } from '../../utils/api';
 import { useToast } from '../../context/ToastContext';
+import GenerateOnboardingModal from '../../components/talent/GenerateOnboardingModal';
 
 export default function Onboarding() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newTaskTitles, setNewTaskTitles] = useState({});
@@ -63,10 +65,17 @@ export default function Onboarding() {
   if (isLoading) return <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>Loading onboarding...</div>;
   return (
     <div className="animate-in">
-      <div className="page-header">
-        <h1 className="page-title">Onboarding</h1>
-        <p className="page-subtitle">Track new hire onboarding progress</p>
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h1 className="page-title">Onboarding</h1>
+          <p className="page-subtitle">Track new hire onboarding progress</p>
+        </div>
+        <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }} onClick={() => setIsModalOpen(true)}>
+          <Plus size={16} /> Generate Link
+        </button>
       </div>
+
+      <GenerateOnboardingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {employees.length === 0 ? (
