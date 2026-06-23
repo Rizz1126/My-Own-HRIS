@@ -273,8 +273,24 @@ export default function Dashboard() {
         <p className="page-subtitle">Admin analytics and contract monitoring for workforce and project health.</p>
       </div>
 
-      {/* KPI Row */}
-      <div className="kpi-grid">
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* ═══════ SECTION 1: STATUS KARYAWAN ═══════════════ */}
+      {/* ═══════════════════════════════════════════════════════ */}
+
+      <div style={{ marginTop: '8px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+          <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg, #6366F1 0%, #818CF8 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Users size={20} style={{ color: '#fff' }} />
+          </div>
+          <div>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Status Karyawan</h2>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>Headcount, department distribution & employee cost analysis</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Employee KPI */}
+      <div className="kpi-grid" style={{ gridTemplateColumns: 'repeat(3, minmax(200px, 1fr))' }}>
         <div className="kpi-card">
           <div className="kpi-icon primary"><Users size={24} /></div>
           <div className="kpi-content">
@@ -284,24 +300,24 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="kpi-card">
-          <div className="kpi-icon warning"><Shield size={24} /></div>
+          <div className="kpi-icon info"><CalendarCheck size={24} /></div>
           <div className="kpi-content">
-            <div className="kpi-label">Active Contracts</div>
-            <div className="kpi-value">{formatNumber(activeContractsCount)}</div>
-            <div className="kpi-trend"><span style={{ color: 'var(--color-danger)' }}>{contractStats.expiring30}</span> expiring soon</div>
+            <div className="kpi-label">Present Today</div>
+            <div className="kpi-value">{formatNumber(presentCount || 0)}</div>
+            <div className="kpi-trend">{activeEmployees > 0 ? Math.round(((presentCount || 0) / activeEmployees) * 100) : 0}% attendance rate</div>
           </div>
         </div>
         <div className="kpi-card">
-          <div className="kpi-icon info"><Building2 size={24} /></div>
+          <div className="kpi-icon" style={{ background: 'rgba(99,102,241,0.12)', color: '#6366F1' }}><Building2 size={24} /></div>
           <div className="kpi-content">
-            <div className="kpi-label">Active Projects</div>
-            <div className="kpi-value">{formatNumber(activeProjectCount)}</div>
-            <div className="kpi-trend up"><TrendingUp size={14} /> {formatNumber(activeClientCount)} clients</div>
+            <div className="kpi-label">Departments</div>
+            <div className="kpi-value">{dynamicDeptStats.length}</div>
+            <div className="kpi-trend">Active departments</div>
           </div>
         </div>
       </div>
 
-      {/* Charts Row 1 */}
+      {/* Employee Charts Row 1 */}
       <div className="grid-dashboard" style={{ marginBottom: '24px' }}>
         <div className="chart-card">
           <div className="chart-header">
@@ -338,7 +354,7 @@ export default function Dashboard() {
               <option value="All">All Employees</option>
             </select>
           </div>
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={280}>
             <BarChart data={dynamicDeptStats} layout="vertical" margin={{ left: 0, right: 10, top: 10, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
               <XAxis type="number" stroke="var(--text-muted)" fontSize={11} />
@@ -350,9 +366,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Charts Row 2: Cost vs Revenue & Pie Chart */}
+      {/* Employee Charts Row 2: Cost vs Revenue & Pie Chart */}
       <div className="grid-dashboard" style={{ marginBottom: '24px' }}>
-        {/* Cost vs Revenue */}
         <div className="chart-card">
           <div className="chart-header">
             <h3 className="chart-title">Employee Cost vs Revenue</h3>
@@ -383,7 +398,6 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </div>
 
-        {/* Department Pie Chart */}
         <div className="chart-card">
           <div className="chart-header">
             <h3 className="chart-title">Department Distribution</h3>
@@ -402,13 +416,70 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Bottom 3 Compact Cards */}
-      <div className="grid-dashboard" style={{ gridTemplateColumns: 'repeat(3, minmax(280px, 1fr))', gap: '20px' }}>
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* ═══════ SECTION 2: STATUS KONTRAK ════════════════ */}
+      {/* ═══════════════════════════════════════════════════════ */}
 
-        {/* Contract — Compact + Popup */}
+      <div style={{ marginTop: '40px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+          <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg, #F59E0B 0%, #F97316 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Shield size={20} style={{ color: '#fff' }} />
+          </div>
+          <div>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Status Kontrak</h2>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>Contract monitoring, expiry alerts & distribution overview</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Contract KPI */}
+      <div className="kpi-grid" style={{ gridTemplateColumns: 'repeat(4, minmax(160px, 1fr))' }}>
+        {contractCategories.map(cat => (
+          <div className="kpi-card" key={cat.key}>
+            <div className="kpi-icon" style={{ background: `${cat.color}18`, color: cat.color }}><Shield size={24} /></div>
+            <div className="kpi-content">
+              <div className="kpi-label">{cat.label}</div>
+              <div className="kpi-value">{formatNumber(cat.count)}</div>
+              <div className="kpi-trend" style={{ color: cat.color }}>{cat.key === 'expired' ? 'Needs renewal' : cat.key === 'expiring30' ? 'Urgent attention' : cat.key === 'expiring60' ? 'Review soon' : 'Healthy'}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Contract Charts */}
+      <div className="grid-dashboard" style={{ marginBottom: '24px' }}>
+        {/* Contract Distribution Donut */}
+        <div className="chart-card">
+          <div className="chart-header">
+            <h3 className="chart-title">Contract Distribution</h3>
+            <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{formatNumber(nonPermanentContracts.length)} total contracts</span>
+          </div>
+          <ResponsiveContainer width="100%" height={280}>
+            <PieChart>
+              <Pie
+                data={contractCategories.filter(c => c.count > 0).map(c => ({ name: c.label, value: c.count, color: c.color }))}
+                cx="50%"
+                cy="50%"
+                innerRadius={65}
+                outerRadius={100}
+                paddingAngle={4}
+                dataKey="value"
+                nameKey="name"
+              >
+                {contractCategories.filter(c => c.count > 0).map((cat, index) => (
+                  <Cell key={`contract-cell-${index}`} fill={cat.color} />
+                ))}
+              </Pie>
+              <Tooltip contentStyle={chartTooltipStyle} formatter={(v) => [`${v} contracts`, 'Count']} />
+              <Legend iconType="circle" wrapperStyle={{ fontSize: '0.82rem', paddingTop: '8px' }} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Contract Monitoring Card */}
         <div
           className="card"
-          style={compactCardStyle}
+          style={{ ...compactCardStyle, display: 'flex', flexDirection: 'column' }}
           onClick={() => setPopup('contract')}
           onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
           onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
@@ -417,22 +488,99 @@ export default function Dashboard() {
             <h3 className="card-title"><Shield size={18} style={{ marginRight: '8px' }} /> Contract Monitoring</h3>
             <ChevronRight size={16} style={{ color: 'var(--text-muted)' }} />
           </div>
-          <div className="card-body">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginTop: '4px' }}>
+          <div className="card-body" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginTop: '4px' }}>
               {contractCategories.map(cat => (
-                <div key={cat.key} style={{ textAlign: 'center', padding: '10px 4px', borderRadius: '12px', background: 'var(--bg-secondary)' }}>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: cat.color }}>{formatNumber(cat.count)}</div>
-                  <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '2px' }}>{cat.label}</div>
+                <div key={cat.key} style={{ textAlign: 'center', padding: '16px 8px', borderRadius: '14px', background: 'var(--bg-secondary)' }}>
+                  <div style={{ fontSize: '1.6rem', fontWeight: 700, color: cat.color }}>{formatNumber(cat.count)}</div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '4px' }}>{cat.label}</div>
                 </div>
               ))}
             </div>
-            <div style={{ marginTop: '14px', fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span>Click to view contract details</span>
+            <div style={{ marginTop: '18px', fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Eye size={13} /> Click to view contract details
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Portfolio — Compact + Popup */}
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* ═══════ SECTION 3: ALOKASI WAKTU ═════════════════ */}
+      {/* ═══════════════════════════════════════════════════════ */}
+
+      <div style={{ marginTop: '40px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+          <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg, #06B6D4 0%, #14B8A6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ClipboardList size={20} style={{ color: '#fff' }} />
+          </div>
+          <div>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Alokasi Waktu</h2>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>Resource allocation across active projects & departments</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="chart-card" style={{ marginBottom: '24px' }}>
+        <div className="chart-header">
+          <h3 className="chart-title">Project & Department Allocation</h3>
+          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Active allocation percentage</span>
+        </div>
+        <ResponsiveContainer width="100%" height={320}>
+          <BarChart data={allocationData} layout="vertical" margin={{ left: 10, right: 30, top: 10, bottom: 10 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
+            <XAxis type="number" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} unit="%" domain={[0, 100]} />
+            <YAxis type="category" dataKey="project" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} width={120} />
+            <Tooltip
+              contentStyle={chartTooltipStyle}
+              formatter={v => [`${v}%`, 'Allocation']}
+            />
+            <Bar dataKey="allocation" radius={[0, 6, 6, 0]} barSize={24}>
+              {(allocationData || []).map((entry, index) => (
+                <Cell key={`alloc-${index}`} fill={`hsl(${175 + index * 18}, 70%, ${48 + index * 3}%)`} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* ═══════ SECTION 4: PROJECT & PORTFOLIO ═══════════ */}
+      {/* ═══════════════════════════════════════════════════════ */}
+
+      <div style={{ marginTop: '40px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+          <div style={{ width: 36, height: 36, borderRadius: '10px', background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Building2 size={20} style={{ color: '#fff' }} />
+          </div>
+          <div>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Project & Portfolio</h2>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>Active projects, client overview & top performing portfolio</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Project KPIs */}
+      <div className="kpi-grid" style={{ gridTemplateColumns: 'repeat(2, minmax(200px, 1fr))' }}>
+        <div className="kpi-card">
+          <div className="kpi-icon" style={{ background: 'rgba(16,185,129,0.12)', color: '#10B981' }}><Building2 size={24} /></div>
+          <div className="kpi-content">
+            <div className="kpi-label">Active Projects</div>
+            <div className="kpi-value">{formatNumber(activeProjectCount)}</div>
+            <div className="kpi-trend up"><TrendingUp size={14} /> Running smoothly</div>
+          </div>
+        </div>
+        <div className="kpi-card">
+          <div className="kpi-icon info"><Users size={24} /></div>
+          <div className="kpi-content">
+            <div className="kpi-label">Active Clients</div>
+            <div className="kpi-value">{formatNumber(activeClientCount)}</div>
+            <div className="kpi-trend up"><TrendingUp size={14} /> Client portfolio</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Portfolio Snapshot Card */}
+      <div style={{ marginBottom: '24px' }}>
         <div
           className="card"
           style={compactCardStyle}
@@ -441,48 +589,40 @@ export default function Dashboard() {
           onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
         >
           <div className="card-header">
-            <h3 className="card-title"><Building2 size={18} style={{ marginRight: '8px' }} /> Portfolio Snapshot</h3>
+            <h3 className="card-title"><Building2 size={18} style={{ marginRight: '8px' }} /> Top Performing Projects</h3>
             <ChevronRight size={16} style={{ color: 'var(--text-muted)' }} />
           </div>
           <div className="card-body">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '4px' }}>
-              <div style={{ textAlign: 'center', padding: '14px 8px', borderRadius: '12px', background: 'var(--bg-secondary)' }}>
-                <div style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--color-primary)' }}>{formatNumber(activeClientCount)}</div>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px' }}>Active Clients</div>
+            {topProjects.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '10px', marginTop: '4px' }}>
+                {topProjects.slice(0, 6).map(project => (
+                  <div key={project.projectCode} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', borderRadius: '12px', background: 'var(--bg-secondary)' }}>
+                    <div style={{ width: 32, height: 32, borderRadius: '8px', background: project.progress >= 80 ? 'rgba(16,185,129,0.12)' : project.progress >= 50 ? 'rgba(99,102,241,0.12)' : 'rgba(245,158,11,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Building2 size={16} style={{ color: project.progress >= 80 ? '#10B981' : project.progress >= 50 ? '#6366F1' : '#F59E0B' }} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{project.projectName}</div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px' }}>{project.client}</div>
+                      <div style={{ height: '4px', borderRadius: '2px', background: 'var(--border-color)', overflow: 'hidden', marginTop: '6px' }}>
+                        <div style={{ height: '100%', width: `${project.progress}%`, background: project.progress >= 80 ? '#10B981' : project.progress >= 50 ? '#6366F1' : '#F59E0B', borderRadius: '2px', transition: 'width 0.4s' }} />
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: project.progress >= 80 ? '#10B981' : project.progress >= 50 ? '#6366F1' : '#F59E0B', flexShrink: 0 }}>{project.progress}%</span>
+                  </div>
+                ))}
               </div>
-              <div style={{ textAlign: 'center', padding: '14px 8px', borderRadius: '12px', background: 'var(--bg-secondary)' }}>
-                <div style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--color-success)' }}>{formatNumber(activeProjectCount)}</div>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px' }}>Active Projects</div>
-              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>No project data available</div>
+            )}
+            <div style={{ marginTop: '14px', fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Eye size={13} /> Click to view full portfolio details
             </div>
-            <div style={{ marginTop: '14px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Click to view top performing projects</div>
-          </div>
-        </div>
-
-        {/* Time Allocation — Horizontal Bar Chart */}
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title"><ClipboardList size={18} style={{ marginRight: '8px' }} /> Time Allocation</h3>
-          </div>
-          <div className="card-body">
-            <div style={{ marginBottom: '8px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Active project & department allocation (%)</div>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={allocationData} layout="vertical" margin={{ left: 0, right: 20, top: 0, bottom: 0 }}>
-                <XAxis type="number" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} unit="%" />
-                <YAxis type="category" dataKey="project" stroke="var(--text-muted)" fontSize={11} tickLine={false} axisLine={false} width={90} />
-                <Tooltip
-                  contentStyle={chartTooltipStyle}
-                  formatter={v => [`${v}%`, 'Allocation']}
-                />
-                <Bar dataKey="allocation" fill="var(--color-primary)" radius={[0, 6, 6, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
           </div>
         </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════ */}
-      {/* ═══════ OKR MANAGEMENT DASHBOARD SECTION ═══════ */}
+      {/* ═══════ SECTION 5: OKR OVERVIEW ══════════════════ */}
       {/* ═══════════════════════════════════════════════════ */}
 
       <div style={{ marginTop: '40px', marginBottom: '8px' }}>

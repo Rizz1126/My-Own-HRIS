@@ -110,14 +110,28 @@ async function main() {
       }
     }
 
-    // 6. Contracts
+    // 6. Contracts (with realistic expiry distribution)
     console.log('📜 Creating contracts...');
-    const contractData = createdEmployees.map(emp => ({
-      employeeId: emp.id,
-      type: emp.level === 'Director' || emp.level === 'Manager' ? 'PKWTT' : 'PKWT',
-      startDate: emp.joinDate,
-      endDate: emp.level === 'Director' || emp.level === 'Manager' ? null : '2025-12-31',
-    }));
+    const contractData = createdEmployees.map((emp, idx) => {
+      const isPermanent = emp.level === 'Director' || emp.level === 'Manager';
+      let endDate: string | null = null;
+      if (!isPermanent) {
+        const daysOffset = idx % 5 === 0 ? Math.floor(Math.random() * 20) + 5       // <30 days
+                        : idx % 5 === 1 ? Math.floor(Math.random() * 25) + 35      // 31-60 days
+                        : idx % 5 === 2 ? Math.floor(Math.random() * 120) + 70     // >60 days
+                        : idx % 5 === 3 ? -(Math.floor(Math.random() * 30) + 1)    // expired
+                        : Math.floor(Math.random() * 200) + 90;                    // >60 days
+        const d = new Date();
+        d.setDate(d.getDate() + daysOffset);
+        endDate = d.toISOString().split('T')[0];
+      }
+      return {
+        employeeId: emp.id,
+        type: isPermanent ? 'PKWTT' : 'PKWT',
+        startDate: emp.joinDate,
+        endDate,
+      };
+    });
     if (contractData.length > 0) await db.insert(schema.contracts).values(contractData);
 
     // 7. Clients & Projects
@@ -257,10 +271,16 @@ async function main() {
     // 14. Announcements
     console.log('📢 Creating announcements...');
     const announcementData = [
-      { title: 'Welcome to the New HRIS System!', content: 'We are excited to announce the launch of our new HRIS system. This platform will streamline all HR processes.', priority: 'High', createdBy: createdEmployees[0].id },
-      { title: 'Townhall Meeting Q3', content: 'Please join our upcoming Townhall Meeting next Friday at 2 PM to discuss Q3 targets.', priority: 'Normal', createdBy: createdEmployees[1].id },
-      { title: 'Health Insurance Upgrade', content: 'Great news! We have upgraded our corporate health insurance policy to cover dental.', priority: 'Normal', createdBy: createdEmployees[1].id },
-      { title: 'Server Maintenance', content: 'Our main application servers will be undergoing maintenance this Saturday from 2 AM to 4 AM.', priority: 'High', createdBy: createdEmployees[0].id },
+      { title: 'Welcome to the New HRIS System!', content: 'We are excited to announce the launch of our new HRIS system. This platform will streamline all HR processes including attendance, payroll, leave management, and performance reviews. Please explore and provide feedback!', priority: 'High', createdBy: createdEmployees[0].id },
+      { title: 'Townhall Meeting Q3 2026', content: 'Please join our upcoming Townhall Meeting next Friday at 2 PM in the main auditorium (or via Zoom for remote employees) to discuss Q3 targets, company performance, and strategic roadmap.', priority: 'Normal', createdBy: createdEmployees[1].id },
+      { title: 'Health Insurance Upgrade', content: 'Great news! We have upgraded our corporate health insurance policy to cover dental and optical. All employees are automatically enrolled starting next month. Contact HR for details.', priority: 'Normal', createdBy: createdEmployees[1].id },
+      { title: 'Scheduled Server Maintenance — Saturday', content: 'Our main application servers will be undergoing maintenance this Saturday from 2 AM to 4 AM WIB. All internal systems including HRIS and email will be temporarily unavailable during this window.', priority: 'High', createdBy: createdEmployees[0].id },
+      { title: 'New Remote Work Policy Update', content: 'Starting next month, all employees are eligible for a hybrid work arrangement with minimum 3 days in-office per week. Department heads may adjust schedules based on project needs. Full policy document available on the company portal.', priority: 'High', createdBy: createdEmployees[1].id },
+      { title: 'Annual Company Outing — Save the Date!', content: 'Mark your calendars! Our annual company outing is scheduled for August 15-16, 2026 at Taman Safari, Bogor. More details and registration form will be shared soon. Bring your enthusiasm! 🎉', priority: 'Normal', createdBy: createdEmployees[1].id },
+      { title: 'OKR Review Cycle Reminder', content: 'Q2 OKR review cycle is now open. All employees must update their key results progress and submit a self-assessment by end of this week. Managers should complete team reviews by next Friday.', priority: 'High', createdBy: createdEmployees[0].id },
+      { title: 'Engineering Knowledge Sharing Session', content: 'Join us this Thursday at 3 PM for a tech talk on "Microservices Best Practices" by our CTO Topan Rizaldi. Open to all departments. Snacks provided! 🍕', priority: 'Normal', createdBy: createdEmployees[0].id },
+      { title: 'Payroll Processing Schedule Change', content: 'Please note that starting July 2026, salary disbursement will be processed on the 25th of each month (previously 28th). Ensure your bank details are up to date in the HRIS system.', priority: 'Normal', createdBy: createdEmployees[1].id },
+      { title: 'Congratulations to Our Star Performers! 🌟', content: 'We would like to recognize and congratulate our top performers for Q2: Budi Santoso (Engineering), Dewi Lestari (Design), and Eko Prasetyo (Product). Thank you for your outstanding contributions!', priority: 'Normal', createdBy: createdEmployees[0].id },
     ];
     if (announcementData.length > 0) await db.insert(schema.announcements).values(announcementData);
 
