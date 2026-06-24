@@ -87,7 +87,7 @@ export default function RecruitmentAnalytics() {
     <div className="animate-in">
       <div className="page-header">
         <h1 className="page-title">Recruitment Analytics</h1>
-        <p className="page-subtitle">Real-time infographic seluruh proses rekrutmen yang sedang berjalan.</p>
+        <p className="page-subtitle">Real-time infographic of all ongoing recruitment processes.</p>
       </div>
 
       {/* KPI Cards */}

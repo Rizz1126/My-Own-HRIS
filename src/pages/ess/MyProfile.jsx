@@ -352,11 +352,11 @@ export default function MyProfile() {
                     value={editForm.maritalStatus || 'TK/0'} 
                     onChange={e => setEditForm(p => ({ ...p, maritalStatus: e.target.value }))}
                   >
-                    <option value="TK/0">TK/0 - Belum Menikah / Tidak Ada Tanggungan</option>
-                    <option value="K/0">K/0 - Menikah / Tidak Ada Tanggungan</option>
-                    <option value="K/1">K/1 - Menikah / 1 Tanggungan</option>
-                    <option value="K/2">K/2 - Menikah / 2 Tanggungan</option>
-                    <option value="K/3">K/3 - Menikah / 3 Tanggungan</option>
+                    <option value="TK/0">TK/0 - Single / No Dependents</option>
+                    <option value="K/0">K/0 - Married / No Dependents</option>
+                    <option value="K/1">K/1 - Married / 1 Dependent</option>
+                    <option value="K/2">K/2 - Married / 2 Dependents</option>
+                    <option value="K/3">K/3 - Married / 3 Dependents</option>
                   </select>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
                     Note: Changes to Marital Status will automatically adjust PTKP calculations in Payroll.

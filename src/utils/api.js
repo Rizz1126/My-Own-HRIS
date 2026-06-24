@@ -7,7 +7,7 @@ const BASE_URL = import.meta.env.PROD ? '/api' : (import.meta.env.VITE_API_URL |
 export async function apiFetch(endpoint, options = {}) {
   if (options.method && options.method !== 'GET' && !endpoint.includes('/auth')) {
     if (sessionStorage.getItem('hris-visitor-mode') === 'true') {
-      throw new Error('Akses Pelanggaran: Anda login sebagai Visitor. Tidak diizinkan melakukan perubahan data.');
+      throw new Error('Access Violation: You are logged in as a Visitor. Data modifications are not allowed.');
     }
   }
 

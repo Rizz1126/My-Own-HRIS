@@ -6,19 +6,19 @@ import { useEmployees } from '../../context/EmployeeContext';
 
 const BPJS_RATES = {
   kesehatan: {
-    company: { rate: 0.04, label: '4%', desc: 'Ditanggung Perusahaan' },
-    employee: { rate: 0.01, label: '1%', desc: 'Dipotong Karyawan', max: 12000000 },
-    note: 'Maks. upah = 12× PTKP (Rp 12.000.000)',
+    company: { rate: 0.04, label: '4%', desc: 'Paid by Company' },
+    employee: { rate: 0.01, label: '1%', desc: 'Deducted from Employee', max: 12000000 },
+    note: 'Max. wage = 12× PTKP (Rp 12,000,000)',
   },
   jht: {
-    company: { rate: 0.037, label: '3.7%', desc: 'Jaminan Hari Tua - Perusahaan' },
-    employee: { rate: 0.02, label: '2%', desc: 'Jaminan Hari Tua - Karyawan' },
+    company: { rate: 0.037, label: '3.7%', desc: 'Old Age Security - Company' },
+    employee: { rate: 0.02, label: '2%', desc: 'Old Age Security - Employee' },
   },
-  jkk: { company: { rate: 0.0024, label: '0.24%', desc: 'Jaminan Kecelakaan Kerja' } },
-  jkm: { company: { rate: 0.003, label: '0.3%', desc: 'Jaminan Kematian' } },
+  jkk: { company: { rate: 0.0024, label: '0.24%', desc: 'Work Accident Insurance' } },
+  jkm: { company: { rate: 0.003, label: '0.3%', desc: 'Death Insurance' } },
   jp: {
-    company: { rate: 0.02, label: '2%', desc: 'Jaminan Pensiun - Perusahaan', max: 9559600 },
-    employee: { rate: 0.01, label: '1%', desc: 'Jaminan Pensiun - Karyawan', max: 9559600 },
+    company: { rate: 0.02, label: '2%', desc: 'Pension Insurance - Company', max: 9559600 },
+    employee: { rate: 0.01, label: '1%', desc: 'Pension Insurance - Employee', max: 9559600 },
   },
 };
 
@@ -86,12 +86,12 @@ export default function BPJS() {
           {
             label: 'Company Contribution', value: summary.totalCompany,
             icon: Building2, color: '#6366F1', bg: 'rgba(99,102,241,0.1)',
-            sub: 'Beban perusahaan',
+            sub: 'Company burden',
           },
           {
             label: 'Employee Deduction', value: summary.totalEmployee,
             icon: User, color: '#F59E0B', bg: 'rgba(245,158,11,0.1)',
-            sub: 'Dipotong dari gaji',
+            sub: 'Deducted from salary',
           },
           {
             label: 'Compliance Rate', value: '100%',
@@ -127,14 +127,14 @@ export default function BPJS() {
         </div>
         <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', flex: 1 }}>
           {[
-            { label: 'Kes. Perusahaan', val: '4%', color: '#10B981' },
-            { label: 'Kes. Karyawan', val: '1%', color: '#10B981' },
-            { label: 'JHT Perusahaan', val: '3.7%', color: '#3B82F6' },
-            { label: 'JHT Karyawan', val: '2%', color: '#3B82F6' },
+            { label: 'Health Co.', val: '4%', color: '#10B981' },
+            { label: 'Health Emp.', val: '1%', color: '#10B981' },
+            { label: 'JHT Company', val: '3.7%', color: '#3B82F6' },
+            { label: 'JHT Employee', val: '2%', color: '#3B82F6' },
             { label: 'JKK', val: '0.24%', color: '#6366F1' },
             { label: 'JKM', val: '0.3%', color: '#6366F1' },
-            { label: 'JP Perusahaan', val: '2%', color: '#8B5CF6' },
-            { label: 'JP Karyawan', val: '1%', color: '#8B5CF6' },
+            { label: 'JP Company', val: '2%', color: '#8B5CF6' },
+            { label: 'JP Employee', val: '1%', color: '#8B5CF6' },
           ].map((r, i) => (
             <div key={i} style={{ textAlign: 'center' }}>
               <div style={{ fontWeight: 800, color: r.color, fontSize: '1rem' }}>{r.val}</div>

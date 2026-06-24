@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Eye, EyeOff, Lock, AlertCircle, User } from 'lucide-react';
 
-// Feature Flag untuk Visitor View (Bisa dipasang/copot dengan mengubah nilai true/false)
+// Feature Flag for Visitor View (Can be enabled/disabled by changing the value to true/false)
 const ENABLE_VISITOR_VIEW = true;
 
 export default function Login() {

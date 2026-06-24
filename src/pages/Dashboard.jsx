@@ -274,7 +274,7 @@ export default function Dashboard() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════ */}
-      {/* ═══════ SECTION 1: STATUS KARYAWAN ═══════════════ */}
+      {/* ═══════ SECTION 1: EMPLOYEE STATUS ═══════════════ */}
       {/* ═══════════════════════════════════════════════════════ */}
 
       <div style={{ marginTop: '8px', marginBottom: '8px' }}>
@@ -283,7 +283,7 @@ export default function Dashboard() {
             <Users size={20} style={{ color: '#fff' }} />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Status Karyawan</h2>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Employee Status</h2>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>Headcount, department distribution & employee cost analysis</p>
           </div>
         </div>
@@ -417,7 +417,7 @@ export default function Dashboard() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════ */}
-      {/* ═══════ SECTION 2: STATUS KONTRAK ════════════════ */}
+      {/* ═══════ SECTION 2: CONTRACT STATUS ════════════════ */}
       {/* ═══════════════════════════════════════════════════════ */}
 
       <div style={{ marginTop: '40px', marginBottom: '8px' }}>
@@ -426,7 +426,7 @@ export default function Dashboard() {
             <Shield size={20} style={{ color: '#fff' }} />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Status Kontrak</h2>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Contract Status</h2>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>Contract monitoring, expiry alerts & distribution overview</p>
           </div>
         </div>
@@ -505,7 +505,7 @@ export default function Dashboard() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════ */}
-      {/* ═══════ SECTION 3: ALOKASI WAKTU ═════════════════ */}
+      {/* ═══════ SECTION 3: TIME ALLOCATION ═════════════════ */}
       {/* ═══════════════════════════════════════════════════════ */}
 
       <div style={{ marginTop: '40px', marginBottom: '8px' }}>
@@ -514,7 +514,7 @@ export default function Dashboard() {
             <ClipboardList size={20} style={{ color: '#fff' }} />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Alokasi Waktu</h2>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>Time Allocation</h2>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>Resource allocation across active projects & departments</p>
           </div>
         </div>
@@ -822,7 +822,7 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', flexShrink: 0, whiteSpace: 'nowrap' }}>
-                            {ci.createdAt ? new Date(ci.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }) : ''}
+                            {ci.createdAt ? new Date(ci.createdAt).toLocaleDateString('en-US', { day: '2-digit', month: 'short' }) : ''}
                           </span>
                         </div>
                       );

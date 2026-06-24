@@ -522,7 +522,7 @@ export default function Employees() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Jumlah Tanggungan *</label>
+                  <label className="form-label">Dependents *</label>
                   <select className="form-select" value={form.dependents} onChange={e => setForm({...form, dependents: Number(e.target.value)})}>
                     <option value={0}>0</option>
                     <option value={1}>1</option>
@@ -531,10 +531,10 @@ export default function Employees() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Status Kawin *</label>
+                  <label className="form-label">Marital Status *</label>
                   <select className="form-select" value={form.maritalStatus} onChange={e => setForm({...form, maritalStatus: e.target.value})}>
-                    <option value="Single">Belum Kawin</option>
-                    <option value="Married">Kawin</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
                   </select>
                 </div>
 
@@ -691,7 +691,7 @@ export default function Employees() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Jumlah Tanggungan *</label>
+                  <label className="form-label">Dependents *</label>
                   <select className="form-select" value={editForm.dependents} onChange={e => setEditForm({...editForm, dependents: Number(e.target.value)})}>
                     <option value={0}>0</option>
                     <option value={1}>1</option>
@@ -700,10 +700,10 @@ export default function Employees() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Status Kawin *</label>
+                  <label className="form-label">Marital Status *</label>
                   <select className="form-select" value={editForm.maritalStatus} onChange={e => setEditForm({...editForm, maritalStatus: e.target.value})}>
-                    <option value="Single">Belum Kawin</option>
-                    <option value="Married">Kawin</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
                   </select>
                 </div>
 
@@ -783,12 +783,12 @@ export default function Employees() {
             <div className="modal-body">
               <div className="form-grid">
                 <div className="form-group full-width">
-                  <label className="form-label">Base Salary (Gaji Pokok)</label>
+                  <label className="form-label">Base Salary</label>
                   <input type="number" className="form-input" value={remuForm.salary}
                     onChange={e => setRemuForm({...remuForm, salary: Number(e.target.value)})} />
                 </div>
 
-                <div className="form-section-title">Allowances (Tunjangan)</div>
+                <div className="form-section-title">Allowances</div>
                 <div className="allowance-list">
                   {remuForm.allowances.map((a, idx) => (
                     <div key={idx} className="allowance-row">
@@ -813,7 +813,7 @@ export default function Employees() {
                   </div>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Dependents (Tanggungan)</label>
+                  <label className="form-label">Dependents</label>
                   <select className="form-select" value={remuForm.dependents}
                     onChange={e => setRemuForm({...remuForm, dependents: Number(e.target.value)})}>
                     <option value={0}>0</option>

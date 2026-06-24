@@ -103,7 +103,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
 
   const addTask = () => {
     if (!newTaskTitle.trim()) return;
-    const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
     setTasks(prev => [...prev, { id: Date.now(), title: newTaskTitle.trim(), progress: 0, startedAt: now, completedAt: null }]);
     setNewTaskTitle('');
     setShowTaskInput(false);
@@ -111,7 +111,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
 
   const updateProgress = (id, val) => setTasks(prev => prev.map(t => t.id === id ? { ...t, progress: Math.min(100, Math.max(0, val)) } : t));
   const completeTask = (id) => {
-    const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
     setTasks(prev => prev.map(t => t.id === id ? { ...t, progress: 100, completedAt: now } : t));
   };
   const removeTask = (id) => setTasks(prev => prev.filter(t => t.id !== id));
@@ -154,19 +154,19 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
   }, [workState, startTime, stopTime, lastUpdate, myStatus, tasks]);
 
   const handleStart = () => {
-    const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
     setStartTime(now);
     setWorkState('active');
     setMyStatus('working');
   };
 
   const handleUpdate = () => {
-    const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
     setLastUpdate(now);
   };
 
   const handleStop = () => {
-    const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
     setStopTime(now);
     setWorkState('stopped');
     setMyStatus('standby');
@@ -223,7 +223,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
               </h3>
               {step === 'room' && (
                 <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                  {isSpectator ? '👁 Spectator Mode — read only' : `✅ Checked in • ${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`}
+                  {isSpectator ? '👁 Spectator Mode — read only' : `✅ Checked in • ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}`}
                 </p>
               )}
             </div>
@@ -238,7 +238,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
           {step === 'select' && (
             <div>
               <p style={{ color: 'var(--text-muted)', marginBottom: '20px', fontSize: '0.88rem' }}>
-                Pilih room berdasarkan delegasimu. Atau aktifkan spectator mode untuk melihat room lain.
+                Select a room based on your delegation. Or enable spectator mode to view other rooms.
               </p>
 
               <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: '10px' }}>
@@ -270,7 +270,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
                   <div style={{ fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Eye size={14} /> Show other rooms as spectator
                   </div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Lihat status room lain tanpa check-in</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>View other rooms' status without checking in</div>
                 </div>
               </div>
 
@@ -313,7 +313,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
                   {/* Status switcher — single dropdown button */}
                   {!isSpectator && (
                     <div style={{ marginBottom: '20px', position: 'relative' }}>
-                      <div style={{ fontWeight: 700, marginBottom: '10px', fontSize: '0.85rem' }}>🔄 Status Kerja</div>
+                      <div style={{ fontWeight: 700, marginBottom: '10px', fontSize: '0.85rem' }}>🔄 Work Status</div>
                       <button
                         onClick={() => setShowStatusDropdown(p => !p)}
                         style={{
@@ -361,7 +361,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
 
                   {/* Members List */}
                   <div>
-                    <div style={{ fontWeight: 700, marginBottom: '10px', fontSize: '0.85rem' }}>👥 Team ({roomStats.total}) <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 400 }}>— klik untuk lihat task</span></div>
+                    <div style={{ fontWeight: 700, marginBottom: '10px', fontSize: '0.85rem' }}>👥 Team ({roomStats.total}) <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 400 }}>— click to view tasks</span></div>
                     <div style={{ display: 'grid', gap: '8px', maxHeight: '300px', overflowY: 'auto', paddingRight: '2px' }}>
                       {isLoading ? <div style={{ textAlign: 'center', padding: '20px' }}>Loading members...</div> : members.map(m => (
                         <div
@@ -399,7 +399,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
                   {isSpectator ? (
                     <div style={{ padding: '24px', borderRadius: '14px', background: 'var(--bg-secondary)', textAlign: 'center', color: 'var(--text-muted)' }}>
                       <Eye size={28} style={{ marginBottom: '10px', opacity: 0.4 }} />
-                      <p style={{ fontSize: '0.9rem' }}>Spectator mode — task management tidak tersedia.</p>
+                      <p style={{ fontSize: '0.9rem' }}>Spectator mode — task management is not available.</p>
                     </div>
                   ) : (
                     <div>
@@ -451,7 +451,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
                       {tasks.length === 0 && !showTaskInput ? (
                         <div style={{ textAlign: 'center', padding: '30px 16px', borderRadius: '12px', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }}>
                           <CheckCircle2 size={28} style={{ marginBottom: '8px', opacity: 0.35 }} />
-                          <p style={{ fontSize: '0.85rem' }}>Input task plan harianmu di atas.</p>
+                          <p style={{ fontSize: '0.85rem' }}>Add your daily task plan above.</p>
                         </div>
                       ) : (
                         <div style={{ display: 'grid', gap: '10px', maxHeight: '340px', overflowY: 'auto', paddingRight: '2px' }}>
@@ -469,8 +469,8 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
                               </div>
                               {/* Time details */}
                               <div style={{ display: 'flex', gap: '12px', fontSize: '0.7rem', color: 'var(--text-muted)', marginBottom: '6px', paddingLeft: task.progress === 100 ? '20px' : '0' }}>
-                                {task.startedAt && <span><Clock size={10} style={{ marginRight: '3px', verticalAlign: 'middle' }} />Mulai: <strong>{task.startedAt}</strong></span>}
-                                {task.completedAt ? <span style={{ color: '#10B981' }}>Selesai: <strong>{task.completedAt}</strong></span> : task.startedAt && <span style={{ color: '#F59E0B', fontStyle: 'italic' }}>⏳ Sedang berjalan</span>}
+                                {task.startedAt && <span><Clock size={10} style={{ marginRight: '3px', verticalAlign: 'middle' }} />Started: <strong>{task.startedAt}</strong></span>}
+                                {task.completedAt ? <span style={{ color: '#10B981' }}>Completed: <strong>{task.completedAt}</strong></span> : task.startedAt && <span style={{ color: '#F59E0B', fontStyle: 'italic' }}>⏳ In progress</span>}
                               </div>
 
                               {/* Progress + Done */}
@@ -509,11 +509,11 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
             {/* Session info */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
               <div style={{ display: 'flex', gap: '16px' }}>
-                {startTime && <span><Clock size={12} style={{ marginRight: '4px', verticalAlign: 'middle' }} />Mulai: <strong>{startTime}</strong></span>}
+                {startTime && <span><Clock size={12} style={{ marginRight: '4px', verticalAlign: 'middle' }} />Started: <strong>{startTime}</strong></span>}
                 {lastUpdate && <span>Update: <strong>{lastUpdate}</strong></span>}
-                {stopTime && <span style={{ color: '#EF4444' }}>Selesai: <strong>{stopTime}</strong></span>}
+                {stopTime && <span style={{ color: '#EF4444' }}>Finished: <strong>{stopTime}</strong></span>}
               </div>
-              {tasks.length > 0 && <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>{totalProgress}% selesai</span>}
+              {tasks.length > 0 && <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>{totalProgress}% completed</span>}
             </div>
             {/* Action buttons */}
             <div style={{ display: 'flex', gap: '8px' }}>
@@ -523,7 +523,7 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
                   style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                   onClick={handleStart}
                 >
-                  <Play size={15} /> Start Kerja
+                  <Play size={15} /> Start Work
                 </button>
               )}
               {workState === 'active' && (
@@ -533,14 +533,14 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
                     style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                     onClick={() => setShowTaskInput(true)}
                   >
-                    <Shuffle size={14} /> Pindah Task
+                    <Shuffle size={14} /> Switch Task
                   </button>
                   <button
                     className="btn btn-danger"
                     style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                     onClick={handleStop}
                   >
-                    <Square size={14} /> Akhiri Sesi
+                    <Square size={14} /> End Session
                   </button>
                 </>
               )}
@@ -551,14 +551,14 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
                     style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                     onClick={() => { setWorkState('active'); setStopTime(null); setMyStatus('working'); }}
                   >
-                    <Play size={14} /> Lanjutkan
+                    <Play size={14} /> Resume
                   </button>
                   <button
                     className="btn btn-primary"
                     style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                     onClick={() => { sessionStorage.removeItem('hris-attendance-session'); onClose(); }}
                   >
-                    <Check size={14} /> Check Out & Keluar
+                    <Check size={14} /> Check Out & Leave
                   </button>
                 </>
               )}
@@ -655,8 +655,8 @@ export default function AttendanceRoomModal({ onClose, onStatusChange }) {
                     }}>{t.progress}%</span>
                   </div>
                   <div style={{ display: 'flex', gap: '12px', fontSize: '0.7rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                    {t.startedAt && <span><Clock size={10} style={{ marginRight: '3px', verticalAlign: 'middle' }} />Mulai: <strong>{t.startedAt}</strong></span>}
-                    {t.completedAt ? <span style={{ color: '#10B981' }}>Selesai: <strong>{t.completedAt}</strong></span> : t.startedAt && <span style={{ color: '#F59E0B', fontStyle: 'italic' }}>⏳ Sedang berjalan</span>}
+                    {t.startedAt && <span><Clock size={10} style={{ marginRight: '3px', verticalAlign: 'middle' }} />Started: <strong>{t.startedAt}</strong></span>}
+                    {t.completedAt ? <span style={{ color: '#10B981' }}>Completed: <strong>{t.completedAt}</strong></span> : t.startedAt && <span style={{ color: '#F59E0B', fontStyle: 'italic' }}>⏳ In progress</span>}
                   </div>
                   <div style={{ height: '6px', borderRadius: '3px', background: 'var(--border-color)', overflow: 'hidden' }}>
                     <div style={{

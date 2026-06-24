@@ -450,7 +450,7 @@ export default function OKRBoard() {
                         {kr.checkIns?.length > 0 && (
                           <div style={{ marginTop: '4px', marginBottom: '8px' }}>
                             <ResponsiveContainer width="100%" height={60}>
-                              <LineChart data={[...kr.checkIns].reverse().map(c => ({ date: new Date(c.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }), val: parseFloat(c.value) }))}>
+                              <LineChart data={[...kr.checkIns].reverse().map(c => ({ date: new Date(c.createdAt).toLocaleDateString('en-US', { day: '2-digit', month: 'short' }), val: parseFloat(c.value) }))}>
                                 <Line type="monotone" dataKey="val" stroke={LEVEL_CONFIG[detail.level]?.color || '#6366F1'} strokeWidth={2} dot={{ r: 2 }} />
                                 <XAxis dataKey="date" tick={{ fontSize: 9, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
                                 <Tooltip contentStyle={chartTooltipStyle} />

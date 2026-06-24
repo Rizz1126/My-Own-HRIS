@@ -22,7 +22,7 @@ function LiveClock() {
   }, []);
   return (
     <span style={{ fontVariantNumeric: 'tabular-nums' }}>
-      {time.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+      {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
     </span>
   );
 }
@@ -141,7 +141,7 @@ export default function Lounge() {
   };
 
   const today = new Date();
-  const greeting = today.getHours() < 12 ? 'Selamat pagi' : today.getHours() < 17 ? 'Selamat siang' : 'Selamat sore';
+  const greeting = today.getHours() < 12 ? 'Good morning' : today.getHours() < 17 ? 'Good afternoon' : 'Good evening';
 
   return (
     <div className="animate-in">
@@ -177,7 +177,7 @@ export default function Lounge() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', borderRadius: '12px', padding: '8px 14px', fontSize: '0.82rem' }}>
               <Calendar size={14} />
-              {today.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+              {today.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </div>
           </div>
         </div>
@@ -197,13 +197,13 @@ export default function Lounge() {
           >
             <div style={{ fontSize: '0.75rem', opacity: 0.8, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: workSession?.workState === 'active' ? '#34D399' : 'rgba(255,255,255,0.5)', display: 'inline-block', flexShrink: 0 }} />
-              Status Kerja
+              Work Status
             </div>
             <div style={{ fontWeight: 700, fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
               {workSession?.startTime ? (
                 <>
                   <span style={{ fontSize: '0.95rem' }}>
-                    {workSession.startTime} - {workSession.workState === 'active' ? 'Sedang berjalan' : workSession.stopTime || 'Selesai'}
+                    {workSession.startTime} - {workSession.workState === 'active' ? 'In progress' : workSession.stopTime || 'Finished'}
                     {workSession.stopTime && (
                       <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginLeft: '6px' }}>
                         ({(() => {
@@ -224,10 +224,10 @@ export default function Lounge() {
                   </span>
                 </>
               ) : (
-                <span style={{ opacity: 0.75 }}>Belum Check-in</span>
+                <span style={{ opacity: 0.75 }}>Not Checked-in</span>
               )}
             </div>
-            <div style={{ fontSize: '0.72rem', opacity: 0.7, marginTop: '2px' }}>Klik untuk masuk Attendance Room</div>
+            <div style={{ fontSize: '0.72rem', opacity: 0.7, marginTop: '2px' }}>Click to enter Attendance Room</div>
           </div>
 
 
@@ -265,7 +265,7 @@ export default function Lounge() {
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontWeight: 800, fontSize: '1.2rem', letterSpacing: '-0.01em' }}>Enter Attendance Room</div>
               <div style={{ fontSize: '0.85rem', opacity: 0.6, marginTop: '2px' }}>
-                Check in • Set status kerja • Manage tasks harian
+                Check in • Set work status • Manage daily tasks
               </div>
             </div>
           </div>
@@ -509,7 +509,7 @@ export default function Lounge() {
             </div>
             <div className="modal-footer" style={{ borderTop: 'none', paddingTop: 0 }}>
               <button className="btn btn-primary" onClick={closeViewModal} style={{ width: '100%' }}>
-                Tutup Pengumuman
+                Close Announcement
               </button>
             </div>
           </div>
